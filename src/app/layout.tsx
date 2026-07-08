@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Anton, Inter, JetBrains_Mono } from "next/font/google";
+import { siteContent } from "@/data/site-content";
 import "./globals.css";
 
 const anton = Anton({
@@ -18,10 +19,44 @@ const jetBrainsMono = JetBrains_Mono({
   subsets: ["latin"],
 });
 
+const { brand } = siteContent;
+
+const siteDescription =
+  "Follow Colin's pursuit of becoming an MMA champion in a cinematic documentary series happening right now.";
+
+const metadataBase = new URL(
+  process.env.NEXT_PUBLIC_SITE_URL ??
+    (process.env.VERCEL_URL
+      ? `https://${process.env.VERCEL_URL}`
+      : "http://localhost:3000"),
+);
+
 export const metadata: Metadata = {
-  title: "IMPOSSIBLE | Premium Documentary",
-  description:
-    "A cinematic documentary platform built with Next.js and reusable, dynamic components.",
+  metadataBase,
+  title: `${brand.name} | Premium Documentary`,
+  description: siteDescription,
+  openGraph: {
+    title: `${brand.name} | Premium Documentary`,
+    description: siteDescription,
+    url: "/",
+    siteName: brand.name,
+    images: [
+      {
+        url: "/og.png",
+        width: 2048,
+        height: 1366,
+        alt: `${brand.name} — ${brand.tagline}`,
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: `${brand.name} | Premium Documentary`,
+    description: siteDescription,
+    images: ["/og.png"],
+  },
 };
 
 export default function RootLayout({
