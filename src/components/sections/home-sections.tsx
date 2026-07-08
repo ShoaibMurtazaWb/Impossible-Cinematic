@@ -1,0 +1,453 @@
+/* eslint-disable @next/next/no-img-element */
+"use client";
+
+import { useEffect, useState } from "react";
+import { ChevronLeft, ChevronRight, Diamond, Film, Globe, Megaphone, Play, X } from "lucide-react";
+import {
+  siteContent,
+  type SponsorBenefit,
+  type TeamMember,
+  type VideoItem,
+} from "@/data/site-content";
+import { Button, GlassCard, Logo, SectionHeading } from "@/components/ui/primitives";
+
+function VideoCard({
+  item,
+  onPlay,
+}: {
+  item: VideoItem;
+  onPlay: (item: VideoItem) => void;
+}) {
+  return (
+    <article
+      className="group min-w-[85vw] snap-center cursor-pointer transition-transform duration-500 hover:scale-[1.015] md:min-w-[600px]"
+      onClick={() => onPlay(item)}
+    >
+      <div className="relative mb-6 h-[410px] overflow-hidden rounded-xl border border-white/10 bg-[#ffffff06]">
+        <div
+          className="absolute inset-0 transition-transform duration-700 group-hover:scale-110"
+          style={{
+            backgroundImage: `url("${item.image}")`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+          }}
+        />
+        <div className="absolute inset-0 bg-black/45 transition-colors group-hover:bg-black/20" />
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="grid h-20 w-20 place-items-center rounded-full border border-white/30 bg-black/45 text-[#be0000] backdrop-blur-md transition-all duration-500 group-hover:scale-110 group-hover:border-[#be0000]">
+            <Play size={32} fill="currentColor" />
+          </div>
+        </div>
+      </div>
+      <h3 className="font-display text-3xl uppercase text-[#e5e2e1] transition-colors group-hover:text-[#be0000]">
+        {item.title}
+      </h3>
+      <p className="mt-1 text-sm text-[#e7bdb6]/80">{item.meta}</p>
+    </article>
+  );
+}
+
+function TeamCard({ name, role, bio, image }: TeamMember) {
+  return (
+    <GlassCard className="group text-center transition-all duration-300 hover:scale-[1.02] hover:border-[#be0000]/50">
+      <div className="mx-auto mb-5 h-32 w-32 overflow-hidden rounded-full border border-white/10">
+        <img
+          src={image}
+          alt={name}
+          className="h-full w-full object-cover grayscale transition duration-500 group-hover:grayscale-0"
+        />
+      </div>
+      <h3 className="font-display text-[2rem] uppercase text-[#e5e2e1] transition-colors group-hover:text-[#be0000]">
+        {name}
+      </h3>
+      <p className="mt-2 text-sm uppercase tracking-[0.2em] text-[#ffb4a8]">{role}</p>
+      <p className="mt-4 text-sm leading-relaxed text-[#e7bdb6]/85">{bio}</p>
+    </GlassCard>
+  );
+}
+
+function BenefitIcon({ icon }: { icon: SponsorBenefit["icon"] }) {
+  if (icon === "globe") return <Globe size={20} />;
+  if (icon === "diamond") return <Diamond size={20} />;
+  if (icon === "film") return <Film size={20} />;
+  return <Megaphone size={20} />;
+}
+
+function BenefitCard({ title, description, icon }: SponsorBenefit) {
+  return (
+    <GlassCard className="h-full transition-all duration-300 hover:-translate-y-2 hover:scale-[0.985]">
+      <span className="mb-6 inline-flex rounded-full border border-white/20 bg-white/5 p-3 text-[#be0000]">
+        <BenefitIcon icon={icon} />
+      </span>
+      <h3 className="font-display text-3xl uppercase text-[#e5e2e1]">{title}</h3>
+      <p className="mt-3 text-[#e7bdb6]/80">{description}</p>
+    </GlassCard>
+  );
+}
+
+function StorySlider() {
+  const slides = siteContent.story.slides;
+  const [index, setIndex] = useState(0);
+  const [prevIndex, setPrevIndex] = useState<number | null>(null);
+  const [direction, setDirection] = useState<"next" | "prev">("next");
+  const [isAnimating, setIsAnimating] = useState(false);
+
+  const changeSlide = (nextIndex: number, nextDirection: "next" | "prev") => {
+    if (isAnimating || nextIndex === index) return;
+    setPrevIndex(index);
+    setDirection(nextDirection);
+    setIsAnimating(true);
+    setIndex(nextIndex);
+  };
+
+  const goPrev = () => {
+    const nextIndex = index === 0 ? slides.length - 1 : index - 1;
+    changeSlide(nextIndex, "prev");
+  };
+
+  const goNext = () => {
+    const nextIndex = index === slides.length - 1 ? 0 : index + 1;
+    changeSlide(nextIndex, "next");
+  };
+
+  useEffect(() => {
+    if (!isAnimating) return undefined;
+    const timer = window.setTimeout(() => {
+      setIsAnimating(false);
+      setPrevIndex(null);
+    }, 520);
+    return () => window.clearTimeout(timer);
+  }, [isAnimating, index]);
+
+  const activeSlide = slides[index];
+  const outgoingSlide = prevIndex !== null ? slides[prevIndex] : null;
+
+  return (
+    <div className="relative mx-auto max-w-5xl">
+      <div className="relative aspect-[16/10] overflow-hidden rounded-2xl border border-white/10 bg-[#0e0e0e]">
+        {outgoingSlide ? (
+          <div
+            className={`absolute inset-0 ${
+              direction === "next" ? "story-slide-out-left" : "story-slide-out-right"
+            }`}
+          >
+            <img
+              src={outgoingSlide.image}
+              alt={outgoingSlide.caption}
+              className="h-full w-full object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+            <p className="absolute bottom-6 left-6 right-6 font-display text-2xl uppercase text-white md:text-4xl">
+              {outgoingSlide.caption}
+            </p>
+          </div>
+        ) : null}
+
+        <div
+          key={`${activeSlide.image}-${index}`}
+          className={`absolute inset-0 ${
+            isAnimating
+              ? direction === "next"
+                ? "story-slide-from-right"
+                : "story-slide-from-left"
+              : ""
+          }`}
+        >
+          <img
+            src={activeSlide.image}
+            alt={activeSlide.caption}
+            className="h-full w-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+          <p className="absolute bottom-6 left-6 right-6 font-display text-2xl uppercase text-white md:text-4xl">
+            {activeSlide.caption}
+          </p>
+        </div>
+      </div>
+
+      <div className="mt-6 flex items-center justify-between gap-4">
+        <button
+          type="button"
+          aria-label="Previous slide"
+          onClick={goPrev}
+          disabled={isAnimating}
+          className="grid h-12 w-12 place-items-center rounded-full border border-white/15 text-[#e5e2e1] transition hover:border-[#be0000]/50 hover:bg-white/5 disabled:opacity-50"
+        >
+          <ChevronLeft size={22} />
+        </button>
+
+        <div className="flex items-center gap-2">
+          {slides.map((slide, slideIndex) => (
+            <button
+              key={slide.image}
+              type="button"
+              aria-label={`Go to slide ${slideIndex + 1}`}
+              disabled={isAnimating}
+              onClick={() =>
+                changeSlide(slideIndex, slideIndex > index ? "next" : "prev")
+              }
+              className={`h-2.5 rounded-full transition-all disabled:opacity-50 ${
+                slideIndex === index ? "w-8 bg-[#be0000]" : "w-2.5 bg-white/25 hover:bg-white/50"
+              }`}
+            />
+          ))}
+        </div>
+
+        <button
+          type="button"
+          aria-label="Next slide"
+          onClick={goNext}
+          disabled={isAnimating}
+          className="grid h-12 w-12 place-items-center rounded-full border border-white/15 text-[#e5e2e1] transition hover:border-[#be0000]/50 hover:bg-white/5 disabled:opacity-50"
+        >
+          <ChevronRight size={22} />
+        </button>
+      </div>
+    </div>
+  );
+}
+
+export function HomeSections() {
+  const [activeVideo, setActiveVideo] = useState<VideoItem | null>(null);
+
+  useEffect(() => {
+    if (!activeVideo) return undefined;
+    const onEsc = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setActiveVideo(null);
+    };
+    window.addEventListener("keydown", onEsc);
+    return () => window.removeEventListener("keydown", onEsc);
+  }, [activeVideo]);
+
+  return (
+    <main className="overflow-x-hidden">
+      <section className="relative flex min-h-screen items-center overflow-hidden px-4 pb-24 pt-28 md:px-16 md:pt-36">
+        <div className="absolute inset-0 film-grain">
+          <video
+            className="absolute inset-0 h-full w-full scale-110 object-cover"
+            src={siteContent.hero.video}
+            poster={siteContent.hero.poster}
+            autoPlay
+            muted
+            loop
+            playsInline
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-[#131313]/80 via-[#131313]/45 to-[#131313]" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#131313]/85 via-transparent to-[#131313]/85" />
+        </div>
+        <div className="relative mx-auto max-w-[1440px] text-center">
+          <Logo className="mx-auto max-w-[400px] md:max-w-[600px]" />
+          <div className="mx-auto mt-8 w-full space-y-3 px-2">
+            {siteContent.hero.lines.map((line) => (
+              <p
+                key={line}
+                className="whitespace-nowrap text-center text-base text-[#e7bdb6]/90 sm:text-lg md:text-xl"
+              >
+                {line}
+              </p>
+            ))}
+          </div>
+          <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
+            {siteContent.hero.ctas.map((cta) => (
+              <Button
+                key={cta.label}
+                href={cta.href}
+                variant={cta.variant === "secondary" ? "glass" : cta.variant}
+              >
+                {cta.label}
+              </Button>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section id="partners" className="border-y border-white/5 bg-[#0e0e0e] px-4 py-28 md:px-16">
+        <div className="mx-auto max-w-[1440px]">
+          <p className="mb-12 text-center text-xs uppercase tracking-[0.2em] text-[#e7bdb6]/80">
+            Production Partners
+          </p>
+          <div className="flex flex-wrap items-center justify-center gap-12 text-3xl font-bold text-[#e5e2e1]/55 md:gap-24 md:text-5xl">
+            {siteContent.partners.map((partner) => (
+              <span key={partner}>{partner}</span>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="flex min-h-screen items-center bg-[#131313] px-4 py-24 md:px-16">
+        <div className="mx-auto grid max-w-[1440px] gap-8 md:grid-cols-12 md:items-center">
+          <div className="group md:col-span-7">
+            <div className="h-[620px] overflow-hidden rounded-2xl border border-white/10 transition-transform duration-700 group-hover:scale-[1.02]">
+              <img
+                src={siteContent.tricoast.image}
+                alt={siteContent.tricoast.title}
+                className="h-full w-full object-cover object-center"
+              />
+            </div>
+          </div>
+          <div className="relative z-10 md:col-span-5 md:-ml-16">
+            <GlassCard className="p-10 md:p-12">
+              <h2 className="font-display text-5xl text-[#e5e2e1]">{siteContent.tricoast.title}</h2>
+              <div className="mb-6 mt-5 h-[2px] w-12 bg-[#be0000]" />
+              <p className="mt-4 text-[#e7bdb6]/85">{siteContent.tricoast.body}</p>
+              <Button
+                className="mt-8 text-xs uppercase tracking-[0.2em]"
+                variant="link"
+                rightIcon={
+                  <span className="transition-transform duration-300 group-hover:translate-x-1">→</span>
+                }
+              >
+                Read Full Statement
+              </Button>
+            </GlassCard>
+          </div>
+        </div>
+      </section>
+
+      <section id="story" className="min-h-screen border-t border-white/5 bg-[#131313] px-4 py-24 md:px-16">
+        <div className="mx-auto max-w-[1440px]">
+          <SectionHeading title={siteContent.story.title} subtitle={siteContent.story.subtitle} />
+          <StorySlider />
+        </div>
+      </section>
+
+      <section id="featured" className="min-h-screen border-y border-white/5 bg-[#0e0e0e] px-4 py-24 md:px-16">
+        <div className="mx-auto max-w-[1440px]">
+          <div className="mb-14">
+            <h2 className="font-display text-4xl uppercase text-[#e5e2e1] md:text-5xl">Featured Content</h2>
+            <p className="mt-2 text-[#e7bdb6]/80">Instagram posts and early cuts from the journey.</p>
+          </div>
+          <div className="scrollbar-hidden flex snap-x snap-mandatory gap-8 overflow-x-auto pb-4">
+            {siteContent.featured.map((item) => (
+              <VideoCard key={item.title} item={item} onPlay={setActiveVideo} />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="relative flex min-h-screen items-center overflow-hidden px-4 py-28 text-center md:px-16">
+        <div
+          className="absolute inset-0"
+          style={{
+            backgroundImage: `linear-gradient(to bottom, rgba(19,19,19,.8), rgba(19,19,19,.95)), url("${siteContent.quote.background}")`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            backgroundAttachment: "fixed",
+          }}
+        />
+        <div className="relative mx-auto max-w-3xl">
+          <p className="font-display text-3xl uppercase leading-tight text-[#e5e2e1] md:text-[3.2rem]">
+            &ldquo;{siteContent.quote.text}&rdquo;
+          </p>
+        </div>
+      </section>
+
+      <section
+        id="results"
+        className="relative flex min-h-screen items-center overflow-hidden border-y border-white/5 px-4 py-24 md:px-16"
+      >
+        <div
+          className="absolute inset-0"
+          style={{
+            backgroundImage: `linear-gradient(to bottom, rgba(14,14,14,.88), rgba(14,14,14,.96)), url("${siteContent.results.background}")`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+          }}
+        />
+        <div className="relative mx-auto max-w-[1440px]">
+          <SectionHeading title={siteContent.results.title} subtitle={siteContent.results.subtitle} />
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            {siteContent.results.stats.map((stat) => (
+              <GlassCard key={stat.label} className="text-center">
+                <p className="font-display text-5xl text-[#be0000] md:text-6xl">{stat.value}</p>
+                <p className="mt-3 text-xs uppercase tracking-[0.2em] text-[#e5e2e1]">{stat.label}</p>
+                <p className="mt-4 text-sm text-[#e7bdb6]/80">{stat.detail}</p>
+              </GlassCard>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section id="team" className="flex min-h-screen items-center bg-[#131313] px-4 py-24 md:px-16">
+        <div className="mx-auto max-w-[1440px]">
+          <SectionHeading
+            title="The Visionaries"
+            subtitle="Award-winning talent dedicated to crafting an unprecedented narrative experience."
+          />
+          <div className="grid w-full gap-8 md:grid-cols-2 xl:grid-cols-3 xl:gap-10">
+            {siteContent.team.map((member) => (
+              <TeamCard key={member.name} {...member} />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section
+        id="sponsorship"
+        className="flex min-h-screen items-center border-y border-white/10 bg-[#0e0e0e] px-4 py-24 md:px-16"
+      >
+        <div className="mx-auto grid max-w-[1440px] gap-10 lg:grid-cols-12">
+          <div className="lg:col-span-5">
+            <h2 className="max-w-md font-display text-6xl uppercase tracking-normal leading-normal text-[#e5e2e1] md:text-8xl">
+              {siteContent.partner.title}
+            </h2>
+            <p className="mt-6 text-lg text-[#e5e2e1]">{siteContent.partner.intro}</p>
+            <div className="mt-5 space-y-4 text-[#e7bdb6]/80">
+              {siteContent.partner.body.map((paragraph) => (
+                <p key={paragraph}>{paragraph}</p>
+              ))}
+            </div>
+            <Button className="mt-8" href="#sponsorship">
+              {siteContent.partner.cta}
+            </Button>
+          </div>
+          <div className="grid gap-4 sm:grid-cols-2 lg:col-span-7">
+            {siteContent.partner.benefits.map((benefit) => (
+              <BenefitCard key={benefit.title} {...benefit} />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="relative flex min-h-screen items-center overflow-hidden px-4 py-28 text-center md:px-16">
+        <div
+          className="absolute inset-0"
+          style={{
+            backgroundImage: `linear-gradient(to bottom, rgba(19,19,19,.75), rgba(19,19,19,.95)), url("${siteContent.finalCta.background}")`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+          }}
+        />
+        <div className="relative mx-auto max-w-3xl">
+          <h2 className="font-display text-6xl font-semibold uppercase tracking-normal leading-normal text-[#e5e2e1] md:text-8xl">
+            {siteContent.finalCta.title}
+          </h2>
+          <Button className="mt-8 px-10 py-4" href="#sponsorship">
+            {siteContent.finalCta.cta}
+          </Button>
+        </div>
+      </section>
+
+      {activeVideo ? (
+        <div
+          className="fixed inset-0 z-[80] flex items-center justify-center bg-black/75 p-4 backdrop-blur-sm"
+          onClick={() => setActiveVideo(null)}
+        >
+          <div
+            className="relative w-full max-w-5xl rounded-2xl border border-white/20 bg-[#131313]"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <button
+              type="button"
+              onClick={() => setActiveVideo(null)}
+              className="absolute right-3 top-3 z-10 rounded-full border border-white/20 bg-black/40 p-2 text-white hover:text-[#ffb4a8]"
+            >
+              <X size={20} />
+            </button>
+            <video src={activeVideo.videoUrl} controls autoPlay className="h-auto w-full rounded-2xl" />
+          </div>
+        </div>
+      ) : null}
+    </main>
+  );
+}
