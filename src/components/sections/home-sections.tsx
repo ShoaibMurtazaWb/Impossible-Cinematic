@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { ChevronLeft, ChevronRight, Diamond, Film, Globe, Megaphone, Play, X } from "lucide-react";
 import {
   siteContent,
@@ -87,81 +87,102 @@ function BenefitCard({ title, description, icon }: SponsorBenefit) {
 
 function StorySlider() {
   const slides = siteContent.story.slides;
+  const viewportRef = useRef<HTMLDivElement>(null);
+  const holdTimeoutRef = useRef<number | null>(null);
+  const holdIntervalRef = useRef<number | null>(null);
+  const dragStartXRef = useRef(0);
+  const dragActiveRef = useRef(false);
+
   const [index, setIndex] = useState(0);
-  const [prevIndex, setPrevIndex] = useState<number | null>(null);
-  const [direction, setDirection] = useState<"next" | "prev">("next");
-  const [isAnimating, setIsAnimating] = useState(false);
+  const [dragOffset, setDragOffset] = useState(0);
+  const [isDragging, setIsDragging] = useState(false);
 
-  const changeSlide = (nextIndex: number, nextDirection: "next" | "prev") => {
-    if (isAnimating || nextIndex === index) return;
-    setPrevIndex(index);
-    setDirection(nextDirection);
-    setIsAnimating(true);
-    setIndex(nextIndex);
+  const clearHold = useCallback(() => {
+    if (holdTimeoutRef.current) window.clearTimeout(holdTimeoutRef.current);
+    if (holdIntervalRef.current) window.clearInterval(holdIntervalRef.current);
+    holdTimeoutRef.current = null;
+    holdIntervalRef.current = null;
+  }, []);
+
+  const goPrev = useCallback(() => {
+    setIndex((value) => (value === 0 ? slides.length - 1 : value - 1));
+  }, [slides.length]);
+
+  const goNext = useCallback(() => {
+    setIndex((value) => (value === slides.length - 1 ? 0 : value + 1));
+  }, [slides.length]);
+
+  const startHold = (direction: "prev" | "next") => {
+    clearHold();
+    const step = direction === "prev" ? goPrev : goNext;
+    step();
+    holdTimeoutRef.current = window.setTimeout(() => {
+      holdIntervalRef.current = window.setInterval(step, 380);
+    }, 280);
   };
 
-  const goPrev = () => {
-    const nextIndex = index === 0 ? slides.length - 1 : index - 1;
-    changeSlide(nextIndex, "prev");
+  useEffect(() => () => clearHold(), [clearHold]);
+
+  const onPointerDown = (event: React.PointerEvent<HTMLDivElement>) => {
+    dragActiveRef.current = true;
+    dragStartXRef.current = event.clientX;
+    setIsDragging(true);
+    viewportRef.current?.setPointerCapture(event.pointerId);
   };
 
-  const goNext = () => {
-    const nextIndex = index === slides.length - 1 ? 0 : index + 1;
-    changeSlide(nextIndex, "next");
+  const onPointerMove = (event: React.PointerEvent<HTMLDivElement>) => {
+    if (!dragActiveRef.current || !viewportRef.current) return;
+    const width = viewportRef.current.offsetWidth || 1;
+    const delta = event.clientX - dragStartXRef.current;
+    setDragOffset((delta / width) * 100);
   };
 
-  useEffect(() => {
-    if (!isAnimating) return undefined;
-    const timer = window.setTimeout(() => {
-      setIsAnimating(false);
-      setPrevIndex(null);
-    }, 520);
-    return () => window.clearTimeout(timer);
-  }, [isAnimating, index]);
+  const endDrag = (event: React.PointerEvent<HTMLDivElement>) => {
+    if (!dragActiveRef.current) return;
+    dragActiveRef.current = false;
+    setIsDragging(false);
 
-  const activeSlide = slides[index];
-  const outgoingSlide = prevIndex !== null ? slides[prevIndex] : null;
+    if (dragOffset <= -12) goNext();
+    else if (dragOffset >= 12) goPrev();
+
+    setDragOffset(0);
+    try {
+      viewportRef.current?.releasePointerCapture(event.pointerId);
+    } catch {
+      // ignore release errors when capture was already lost
+    }
+  };
 
   return (
     <div className="relative mx-auto max-w-5xl">
-      <div className="relative aspect-[16/10] overflow-hidden rounded-2xl border border-white/10 bg-[#0e0e0e]">
-        {outgoingSlide ? (
-          <div
-            className={`absolute inset-0 ${
-              direction === "next" ? "story-slide-out-left" : "story-slide-out-right"
-            }`}
-          >
-            <img
-              src={outgoingSlide.image}
-              alt={outgoingSlide.caption}
-              className="h-full w-full object-cover"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
-            <p className="absolute bottom-6 left-6 right-6 font-display text-2xl uppercase text-white md:text-4xl">
-              {outgoingSlide.caption}
-            </p>
-          </div>
-        ) : null}
-
+      <div
+        ref={viewportRef}
+        className="relative aspect-[16/10] cursor-grab overflow-hidden rounded-2xl border border-white/10 bg-[#0e0e0e] active:cursor-grabbing touch-pan-y"
+        onPointerDown={onPointerDown}
+        onPointerMove={onPointerMove}
+        onPointerUp={endDrag}
+        onPointerCancel={endDrag}
+      >
         <div
-          key={`${activeSlide.image}-${index}`}
-          className={`absolute inset-0 ${
-            isAnimating
-              ? direction === "next"
-                ? "story-slide-from-right"
-                : "story-slide-from-left"
-              : ""
-          }`}
+          className={`flex h-full w-full ${isDragging ? "" : "transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]"}`}
+          style={{
+            transform: `translateX(calc(-${index * 100}% + ${dragOffset}%))`,
+          }}
         >
-          <img
-            src={activeSlide.image}
-            alt={activeSlide.caption}
-            className="h-full w-full object-cover"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
-          <p className="absolute bottom-6 left-6 right-6 font-display text-2xl uppercase text-white md:text-4xl">
-            {activeSlide.caption}
-          </p>
+          {slides.map((slide) => (
+            <div key={slide.image} className="relative h-full w-full shrink-0 grow-0 basis-full">
+              <img
+                src={slide.image}
+                alt={slide.caption}
+                className="pointer-events-none h-full w-full object-cover select-none"
+                draggable={false}
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+              <p className="absolute bottom-6 left-6 right-6 font-display text-2xl uppercase text-white md:text-4xl">
+                {slide.caption}
+              </p>
+            </div>
+          ))}
         </div>
       </div>
 
@@ -169,9 +190,14 @@ function StorySlider() {
         <button
           type="button"
           aria-label="Previous slide"
-          onClick={goPrev}
-          disabled={isAnimating}
-          className="grid h-12 w-12 place-items-center rounded-full border border-white/15 text-[#e5e2e1] transition hover:border-[#be0000]/50 hover:bg-white/5 disabled:opacity-50"
+          onPointerDown={(event) => {
+            event.preventDefault();
+            startHold("prev");
+          }}
+          onPointerUp={clearHold}
+          onPointerLeave={clearHold}
+          onPointerCancel={clearHold}
+          className="grid h-12 w-12 cursor-pointer place-items-center rounded-full border border-white/15 text-[#e5e2e1] transition-transform duration-150 active:scale-90 hover:border-[#be0000]/50 hover:bg-white/5"
         >
           <ChevronLeft size={22} />
         </button>
@@ -182,11 +208,8 @@ function StorySlider() {
               key={slide.image}
               type="button"
               aria-label={`Go to slide ${slideIndex + 1}`}
-              disabled={isAnimating}
-              onClick={() =>
-                changeSlide(slideIndex, slideIndex > index ? "next" : "prev")
-              }
-              className={`h-2.5 rounded-full transition-all disabled:opacity-50 ${
+              onClick={() => setIndex(slideIndex)}
+              className={`h-2.5 cursor-pointer rounded-full transition-all duration-150 active:scale-90 ${
                 slideIndex === index ? "w-8 bg-[#be0000]" : "w-2.5 bg-white/25 hover:bg-white/50"
               }`}
             />
@@ -196,9 +219,14 @@ function StorySlider() {
         <button
           type="button"
           aria-label="Next slide"
-          onClick={goNext}
-          disabled={isAnimating}
-          className="grid h-12 w-12 place-items-center rounded-full border border-white/15 text-[#e5e2e1] transition hover:border-[#be0000]/50 hover:bg-white/5 disabled:opacity-50"
+          onPointerDown={(event) => {
+            event.preventDefault();
+            startHold("next");
+          }}
+          onPointerUp={clearHold}
+          onPointerLeave={clearHold}
+          onPointerCancel={clearHold}
+          className="grid h-12 w-12 cursor-pointer place-items-center rounded-full border border-white/15 text-[#e5e2e1] transition-transform duration-150 active:scale-90 hover:border-[#be0000]/50 hover:bg-white/5"
         >
           <ChevronRight size={22} />
         </button>
@@ -209,6 +237,17 @@ function StorySlider() {
 
 export function HomeSections() {
   const [activeVideo, setActiveVideo] = useState<VideoItem | null>(null);
+  const featuredSliderRef = useRef<HTMLDivElement>(null);
+
+  const scrollFeatured = (direction: "prev" | "next") => {
+    const slider = featuredSliderRef.current;
+    if (!slider) return;
+    const amount = Math.max(slider.clientWidth * 0.8, 420);
+    slider.scrollBy({
+      left: direction === "next" ? amount : -amount,
+      behavior: "smooth",
+    });
+  };
 
   useEffect(() => {
     if (!activeVideo) return undefined;
@@ -313,11 +352,34 @@ export function HomeSections() {
 
       <section id="featured" className="min-h-screen border-y border-white/5 bg-[#0e0e0e] px-4 py-24 md:px-16">
         <div className="mx-auto max-w-[1440px]">
-          <div className="mb-14">
-            <h2 className="font-display text-4xl uppercase text-[#e5e2e1] md:text-5xl">Featured Content</h2>
-            <p className="mt-2 text-[#e7bdb6]/80">Instagram posts and early cuts from the journey.</p>
+          <div className="mb-14 flex items-end justify-between gap-4">
+            <div>
+              <h2 className="font-display text-4xl uppercase text-[#e5e2e1] md:text-5xl">Featured Content</h2>
+              <p className="mt-2 text-[#e7bdb6]/80">Instagram posts and early cuts from the journey.</p>
+            </div>
+            <div className="hidden items-center gap-3 md:flex">
+              <button
+                type="button"
+                aria-label="Previous featured"
+                onClick={() => scrollFeatured("prev")}
+                className="grid h-12 w-12 cursor-pointer place-items-center rounded-full border border-white/15 text-[#e5e2e1] transition-transform duration-150 active:scale-90 hover:border-[#be0000]/50 hover:bg-white/5"
+              >
+                <ChevronLeft size={22} />
+              </button>
+              <button
+                type="button"
+                aria-label="Next featured"
+                onClick={() => scrollFeatured("next")}
+                className="grid h-12 w-12 cursor-pointer place-items-center rounded-full border border-white/15 text-[#e5e2e1] transition-transform duration-150 active:scale-90 hover:border-[#be0000]/50 hover:bg-white/5"
+              >
+                <ChevronRight size={22} />
+              </button>
+            </div>
           </div>
-          <div className="scrollbar-hidden flex snap-x snap-mandatory gap-8 overflow-x-auto pb-4">
+          <div
+            ref={featuredSliderRef}
+            className="scrollbar-hidden flex snap-x snap-mandatory gap-8 overflow-x-auto pb-4"
+          >
             {siteContent.featured.map((item) => (
               <VideoCard key={item.title} item={item} onPlay={setActiveVideo} />
             ))}

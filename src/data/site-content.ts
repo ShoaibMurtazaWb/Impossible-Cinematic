@@ -39,7 +39,7 @@ export const siteContent = {
   brand: {
     name: "IMPOSSIBLE",
     tagline: "Redefining reality through the lens.",
-    logo: "https://lh3.googleusercontent.com/aida-public/AB6AXuBLZY_n9ADyw1FMdc17jGplLd2AN8ffyB6mggu3s6XtOc_RMcdryZo4JLnm8rx1sMO1eQxxxknvlBDAOvLFPOFODzdhB5moV3kTOtzuDzCz2-sCN82A92dA1efYFSAVRbLlizZDG0nqdbaQKUrW8hB8ShB_VgKqrEOlEoOePweQrMgFLx5ce99E4EeCUkUTxw7Uyn2n23z16VD2c2f16AR82kdzfSZDUZMlLXHd0ZW2S2wtKC0Tu90xQdTpp-6Q3U4ZH1tXw9JUvMNA",
+    logo: "/impossible-logo.png",
   },
   nav: [
     { label: "Partners", href: "#partners" },
