@@ -8,6 +8,7 @@ type ButtonProps = {
   className?: string;
   rightIcon?: ReactNode;
   leftIcon?: ReactNode;
+  onClick?: () => void;
 };
 
 const buttonBase =
@@ -28,9 +29,10 @@ export function Button({
   className = "",
   leftIcon,
   rightIcon,
+  onClick,
 }: ButtonProps) {
   return (
-    <a href={href} className={`${buttonBase} ${buttonVariants[variant]} ${className}`}>
+    <a href={href} onClick={onClick} className={`${buttonBase} ${buttonVariants[variant]} ${className}`}>
       {leftIcon}
       {children}
       {rightIcon}
@@ -75,13 +77,11 @@ export function GlassCard({
 
 export function Logo({ className = "" }: { className?: string }) {
   return (
-    <>
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-        src={siteContent.brand.logo}
-        alt={`${siteContent.brand.name} logo`}
-        className={`h-auto w-full object-contain ${className}`}
-      />
-    </>
+    // eslint-disable-next-line @next/next/no-img-element
+    <img
+      src={siteContent.brand.logo}
+      alt={`${siteContent.brand.name} logo`}
+      className={`block h-auto max-w-full min-w-0 object-contain ${className}`}
+    />
   );
 }

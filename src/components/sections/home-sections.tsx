@@ -236,7 +236,7 @@ function StorySlider() {
 }
 
 export function HomeSections() {
-  const [activeVideo, setActiveVideo] = useState<VideoItem | null>(null);
+  const [activeVideo,   setActiveVideo] = useState<VideoItem | null>(null);
   const featuredSliderRef = useRef<HTMLDivElement>(null);
 
   const scrollFeatured = (direction: "prev" | "next") => {
@@ -260,10 +260,10 @@ export function HomeSections() {
 
   return (
     <main className="overflow-x-hidden">
-      <section className="relative flex min-h-screen items-center overflow-hidden px-4 pb-24 pt-28 md:px-16 md:pt-36">
+      <section className="relative flex min-h-screen w-full items-center justify-center overflow-hidden px-4 pb-24 pt-28 md:px-16 md:pt-36">
         <div className="absolute inset-0 film-grain">
           <video
-            className="absolute inset-0 h-full w-full scale-110 object-cover"
+            className="absolute inset-0 h-full w-full scale-105 object-cover md:scale-110"
             src={siteContent.hero.video}
             poster={siteContent.hero.poster}
             autoPlay
@@ -274,19 +274,21 @@ export function HomeSections() {
           <div className="absolute inset-0 bg-gradient-to-b from-[#131313]/80 via-[#131313]/45 to-[#131313]" />
           <div className="absolute inset-0 bg-gradient-to-r from-[#131313]/85 via-transparent to-[#131313]/85" />
         </div>
-        <div className="relative mx-auto max-w-[1440px] text-center">
-          <Logo className="mx-auto max-w-[400px] md:max-w-[600px]" />
-          <div className="mx-auto mt-8 w-full space-y-3 px-2">
+        <div className="relative z-10 flex w-full min-w-0 max-w-4xl flex-col items-center px-2 text-center sm:px-4">
+          <div className="w-full min-w-0 px-2">
+            <Logo className="mx-auto w-full drop-shadow-2xl" />
+          </div>
+          <div className="mx-auto mt-8 w-full min-w-0 max-w-2xl space-y-3">
             {siteContent.hero.lines.map((line) => (
               <p
                 key={line}
-                className="whitespace-nowrap text-center text-base text-[#e7bdb6]/90 sm:text-lg md:text-xl"
+                className="text-pretty text-center text-sm leading-relaxed text-[#e7bdb6]/90 sm:text-base md:text-lg lg:whitespace-nowrap"
               >
                 {line}
               </p>
             ))}
           </div>
-          <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
+          <div className="mt-10 flex w-full min-w-0 flex-col items-stretch justify-center gap-4 sm:w-auto sm:flex-row sm:items-center sm:flex-wrap">
             {siteContent.hero.ctas.map((cta) => (
               <Button
                 key={cta.label}
@@ -300,14 +302,16 @@ export function HomeSections() {
         </div>
       </section>
 
-      <section id="partners" className="border-y border-white/5 bg-[#0e0e0e] px-4 py-28 md:px-16">
+      <section id="partners" className="border-y border-white/5 bg-[#0e0e0e] px-4 py-20 sm:py-24 lg:px-16 lg:py-28">
         <div className="mx-auto max-w-[1440px]">
-          <p className="mb-12 text-center text-xs uppercase tracking-[0.2em] text-[#e7bdb6]/80">
+          <p className="mb-8 text-center text-[10px] uppercase tracking-[0.2em] text-[#e7bdb6]/80 sm:mb-10 sm:text-xs lg:mb-12">
             Production Partners
           </p>
-          <div className="flex flex-wrap items-center justify-center gap-12 text-3xl font-bold text-[#e5e2e1]/55 md:gap-24 md:text-5xl">
+          <div className="grid grid-cols-2 place-items-center gap-x-6 gap-y-8 text-xl font-bold text-[#e5e2e1]/55 sm:gap-x-8 sm:gap-y-10 sm:text-2xl lg:flex lg:flex-wrap lg:justify-center lg:gap-24 lg:text-5xl">
             {siteContent.partners.map((partner) => (
-              <span key={partner}>{partner}</span>
+              <span key={partner} className="whitespace-nowrap text-center">
+                {partner}
+              </span>
             ))}
           </div>
         </div>
@@ -352,17 +356,17 @@ export function HomeSections() {
 
       <section id="featured" className="min-h-screen border-y border-white/5 bg-[#0e0e0e] px-4 py-24 md:px-16">
         <div className="mx-auto max-w-[1440px]">
-          <div className="mb-14 flex items-end justify-between gap-4">
+          <div className="mb-8 flex flex-col gap-6 sm:mb-14 sm:flex-row sm:items-end sm:justify-between">
             <div>
               <h2 className="font-display text-4xl uppercase text-[#e5e2e1] md:text-5xl">Featured Content</h2>
               <p className="mt-2 text-[#e7bdb6]/80">Instagram posts and early cuts from the journey.</p>
             </div>
-            <div className="hidden items-center gap-3 md:flex">
+            <div className="flex shrink-0 items-center justify-center gap-3 sm:justify-end">
               <button
                 type="button"
                 aria-label="Previous featured"
                 onClick={() => scrollFeatured("prev")}
-                className="grid h-12 w-12 cursor-pointer place-items-center rounded-full border border-white/15 text-[#e5e2e1] transition-transform duration-150 active:scale-90 hover:border-[#be0000]/50 hover:bg-white/5"
+                className="grid h-11 w-11 cursor-pointer place-items-center rounded-full border border-white/15 text-[#e5e2e1] transition-transform duration-150 active:scale-90 hover:border-[#be0000]/50 hover:bg-white/5 md:h-12 md:w-12"
               >
                 <ChevronLeft size={22} />
               </button>
@@ -370,7 +374,7 @@ export function HomeSections() {
                 type="button"
                 aria-label="Next featured"
                 onClick={() => scrollFeatured("next")}
-                className="grid h-12 w-12 cursor-pointer place-items-center rounded-full border border-white/15 text-[#e5e2e1] transition-transform duration-150 active:scale-90 hover:border-[#be0000]/50 hover:bg-white/5"
+                className="grid h-11 w-11 cursor-pointer place-items-center rounded-full border border-white/15 text-[#e5e2e1] transition-transform duration-150 active:scale-90 hover:border-[#be0000]/50 hover:bg-white/5 md:h-12 md:w-12"
               >
                 <ChevronRight size={22} />
               </button>
