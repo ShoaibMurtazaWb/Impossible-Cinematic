@@ -37,7 +37,7 @@ export function Navbar() {
       <div className="relative z-20 px-[1rem] py-[0.75rem] lg:px-[2rem] lg:py-[1rem] xl:px-[4rem]">
         <div className="flex min-w-0 items-center justify-between gap-[0.75rem] lg:gap-[1rem] xl:gap-[1.5rem]">
           <a href="#" className="relative z-20 shrink-0" aria-label="IMPOSSIBLE home" onClick={closeMenu}>
-            <Logo className="w-[5.75rem] max-w-[5.75rem] lg:w-[7.5rem] lg:max-w-[7.5rem] xl:w-[9.375rem] xl:max-w-[9.375rem]" />
+            <Logo className="w-[100px] max-w-[100px] sm:w-[7.5rem] sm:max-w-[7.75rem] lg:w-[9rem] lg:max-w-[10.5rem] xl:w-[10rem] xl:max-w-[11.5rem]" />
           </a>
 
           <div className="hidden min-w-0 flex-1 items-center justify-center gap-[0.875rem] lg:flex xl:gap-[1.5rem]">
@@ -52,23 +52,25 @@ export function Navbar() {
             ))}
           </div>
 
-          <Button href="#sponsorship" className={`relative z-20 hidden lg:inline-flex ${navButtonClass}`}>
-            Join Project
-          </Button>
+          <div className="relative z-30 flex shrink-0 items-center gap-2">
+            <Button href="#sponsorship" className={navButtonClass}>
+              Join Project
+            </Button>
 
-          <button
-            type="button"
-            aria-label={open ? "Close menu" : "Open menu"}
-            aria-expanded={open}
-            onClick={() => setOpen((prev) => !prev)}
-            className="relative z-30 grid h-[2.75rem] w-[2.75rem] shrink-0 cursor-pointer touch-manipulation place-items-center rounded-full border border-white/15 bg-[#131313]/90 text-[#e5e2e1] transition-transform duration-150 active:scale-90 hover:border-[#be0000]/50 hover:bg-white/5 lg:hidden"
-          >
-            {open ? (
-              <X size={20} className="pointer-events-none" aria-hidden />
-            ) : (
-              <Menu size={20} className="pointer-events-none" aria-hidden />
-            )}
-          </button>
+            <button
+              type="button"
+              aria-label={open ? "Close menu" : "Open menu"}
+              aria-expanded={open}
+              onClick={() => setOpen((prev) => !prev)}
+              className="grid h-[2.3rem] w-[2.3rem] shrink-0 cursor-pointer touch-manipulation place-items-center rounded-full border border-white/15 bg-[#131313]/90 text-[#e5e2e1] transition-transform duration-150 active:scale-90 hover:border-[#be0000]/50 hover:bg-white/5 lg:hidden"
+            >
+              {open ? (
+                <X size={20} className="pointer-events-none" aria-hidden />
+              ) : (
+                <Menu size={20} className="pointer-events-none" aria-hidden />
+              )}
+            </button>
+          </div>
         </div>
       </div>
 
@@ -90,13 +92,6 @@ export function Navbar() {
                   {item.label}
                 </a>
               ))}
-              <Button
-                href="#sponsorship"
-                onClick={closeMenu}
-                className={`mt-[1rem] w-full ${navButtonClass}`}
-              >
-                Join Project
-              </Button>
             </div>
           </div>
         </div>
