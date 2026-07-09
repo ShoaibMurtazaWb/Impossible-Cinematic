@@ -24,19 +24,31 @@ const buttonVariants: Record<NonNullable<ButtonProps["variant"]>, string> = {
 
 export function Button({
   children,
-  href = "#",
+  href,
   variant = "primary",
   className = "",
   leftIcon,
   rightIcon,
   onClick,
 }: ButtonProps) {
+  const classes = `${buttonBase} ${buttonVariants[variant]} ${className}`;
+
+  if (href) {
+    return (
+      <a href={href} onClick={onClick} className={classes}>
+        {leftIcon}
+        {children}
+        {rightIcon}
+      </a>
+    );
+  }
+
   return (
-    <a href={href} onClick={onClick} className={`${buttonBase} ${buttonVariants[variant]} ${className}`}>
+    <button type="button" onClick={onClick} className={classes}>
       {leftIcon}
       {children}
       {rightIcon}
-    </a>
+    </button>
   );
 }
 

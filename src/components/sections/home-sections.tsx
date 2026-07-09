@@ -209,9 +209,8 @@ function StorySlider() {
               type="button"
               aria-label={`Go to slide ${slideIndex + 1}`}
               onClick={() => setIndex(slideIndex)}
-              className={`h-2.5 cursor-pointer rounded-full transition-all duration-150 active:scale-90 ${
-                slideIndex === index ? "w-8 bg-[#be0000]" : "w-2.5 bg-white/25 hover:bg-white/50"
-              }`}
+              className={`h-2.5 cursor-pointer rounded-full transition-all duration-150 active:scale-90 ${slideIndex === index ? "w-8 bg-[#be0000]" : "w-2.5 bg-white/25 hover:bg-white/50"
+                }`}
             />
           ))}
         </div>
@@ -236,8 +235,15 @@ function StorySlider() {
 }
 
 export function HomeSections() {
-  const [activeVideo,   setActiveVideo] = useState<VideoItem | null>(null);
+  const [activeVideo, setActiveVideo] = useState<VideoItem | null>(null);
+  const [showStatementImage, setShowStatementImage] = useState(false);
   const featuredSliderRef = useRef<HTMLDivElement>(null);
+  const heroVideoItem: VideoItem = {
+    title: "Hero Trailer",
+    meta: "Background video",
+    image: siteContent.hero.poster,
+    videoUrl: siteContent.hero.video,
+  };
 
   const scrollFeatured = (direction: "prev" | "next") => {
     const slider = featuredSliderRef.current;
@@ -250,18 +256,25 @@ export function HomeSections() {
   };
 
   useEffect(() => {
-    if (!activeVideo) return undefined;
+    if (!activeVideo && !showStatementImage) return undefined;
     const onEsc = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setActiveVideo(null);
+      if (event.key === "Escape") {
+        setActiveVideo(null);
+        setShowStatementImage(false);
+      }
     };
     window.addEventListener("keydown", onEsc);
     return () => window.removeEventListener("keydown", onEsc);
-  }, [activeVideo]);
+  }, [activeVideo, showStatementImage]);
 
   return (
     <main className="overflow-x-hidden">
       <section className="relative flex min-h-screen w-full items-center justify-center overflow-hidden px-4 pb-24 pt-28 md:px-16 md:pt-36">
-        <div className="absolute inset-0 film-grain">
+        <div
+          className="absolute inset-0 cursor-pointer film-grain"
+          onClick={() => setActiveVideo(heroVideoItem)}
+          aria-hidden
+        >
           <video
             className="absolute inset-0 h-full w-full scale-105 object-cover md:scale-110"
             src={siteContent.hero.video}
@@ -336,6 +349,7 @@ export function HomeSections() {
               <Button
                 className="mt-8 text-xs uppercase tracking-[0.2em]"
                 variant="link"
+                onClick={() => setShowStatementImage(true)}
                 rightIcon={
                   <span className="transition-transform duration-300 group-hover:translate-x-1">→</span>
                 }
@@ -511,6 +525,31 @@ export function HomeSections() {
               <X size={20} />
             </button>
             <video src={activeVideo.videoUrl} controls autoPlay className="h-auto w-full rounded-2xl" />
+          </div>
+        </div>
+      ) : null}
+
+      {showStatementImage ? (
+        <div
+          className="fixed inset-0 z-[80] flex items-center justify-center bg-[#131313]/45 backdrop-blur-md"
+          onClick={() => setShowStatementImage(false)}
+        >
+          <div
+            className="relative flex h-screen w-screen items-center justify-center bg-black/25"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <button
+              type="button"
+              onClick={() => setShowStatementImage(false)}
+              className="absolute right-4 top-4 z-10 cursor-pointer rounded-full border border-white/20 bg-black/40 p-2 text-white hover:text-[#ffb4a8]"
+            >
+              <X size={20} />
+            </button>
+            <img
+              src="/images/matt cohen impossible LOI_image.jpg"
+              alt="Matt Cohen IMPOSSIBLE LOI statement"
+              className="max-h-[94vh] max-w-[96vw] object-contain"
+            />
           </div>
         </div>
       ) : null}

@@ -63,7 +63,7 @@ export const siteContent = {
   },
   partners: ["A24", "NEON", "APPLE TV+", "HBO"],
   tricoast: {
-    title: "Tricoast International",
+    title: "Tricaost Internation - LOI",
     body: "Backed by a formal Letter of Intent, Tricoast International recognizes the groundbreaking potential of IMPOSSIBLE. Their belief in this project validates our commitment to capturing raw, unfiltered truth through the lens of uncompromising cinematic quality.",
     image: "/tricoast_logo.jpeg",
   },
@@ -76,24 +76,32 @@ export const siteContent = {
         caption: "The chase begins.",
       },
       {
-        image: img("WhatsApp Image 2026-07-04 at 22.09.59 (2).jpeg"),
-        caption: "Training for something bigger.",
+        image: img("1.jpg"),
+        caption: "The journey starts here.",
       },
       {
-        image: img("WhatsApp Image 2026-07-04 at 22.10.04.jpeg"),
-        caption: "Pressure under the lights.",
+        image: img("2.jpg"),
+        caption: "Every session counts.",
       },
       {
-        image: img("WhatsApp Image 2026-07-04 at 22.10.06 (2).jpeg"),
-        caption: "Every round tells the truth.",
+        image: img("3.jpg"),
+        caption: "Built in the gym.",
       },
       {
-        image: img("WhatsApp Image 2026-07-04 at 22.09.40 (3).jpeg"),
-        caption: "Building toward the fight.",
+        image: img("4.jpg"),
+        caption: "Pressure creates progress.",
       },
       {
-        image: img("WhatsApp Image 2026-07-04 at 22.09.38 (1).jpeg"),
-        caption: "This one is happening right now.",
+        image: img("5.jpg"),
+        caption: "Eyes on the prize.",
+      },
+      {
+        image: img("6.jpg"),
+        caption: "The grind never stops.",
+      },
+      {
+        image: img("7.jpg"),
+        caption: "This story is still unfolding.",
       },
     ] satisfies StorySlide[],
   },
