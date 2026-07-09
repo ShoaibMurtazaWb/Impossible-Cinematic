@@ -520,7 +520,7 @@ export function HomeSections() {
             <button
               type="button"
               onClick={() => setActiveVideo(null)}
-              className="absolute right-3 top-3 z-10 rounded-full border border-white/20 bg-black/40 p-2 text-white hover:text-[#ffb4a8]"
+              className="absolute right-3 top-3 z-10 cursor-pointer rounded-full border border-white/20 bg-black/40 p-2 text-white hover:text-[#ffb4a8]"
             >
               <X size={20} />
             </button>
