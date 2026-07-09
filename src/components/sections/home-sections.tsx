@@ -305,7 +305,8 @@ export function HomeSections() {
             {siteContent.hero.ctas.map((cta) => (
               <Button
                 key={cta.label}
-                href={cta.href}
+                href={cta.label === "Watch Trailer" ? undefined : cta.href}
+                onClick={cta.label === "Watch Trailer" ? () => setActiveVideo(heroVideoItem) : undefined}
                 variant={cta.variant === "secondary" ? "glass" : cta.variant}
               >
                 {cta.label}
