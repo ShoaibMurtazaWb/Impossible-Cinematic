@@ -12,7 +12,7 @@ type ButtonProps = {
 };
 
 const buttonBase =
-  "group inline-flex items-center justify-center gap-2 px-8 py-4 text-xs font-medium uppercase tracking-[0.18em] transition-all duration-300 hover:scale-95";
+  "group inline-flex cursor-pointer items-center justify-center gap-2 px-8 py-4 text-xs font-medium uppercase tracking-[0.18em] transition-all duration-300 hover:scale-95";
 
 const buttonVariants: Record<NonNullable<ButtonProps["variant"]>, string> = {
   primary:
