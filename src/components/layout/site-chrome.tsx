@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { siteContent } from "@/data/site-content";
 import { Logo } from "@/components/ui/primitives";
 import { Navbar } from "@/components/layout/navbar";
@@ -13,15 +14,22 @@ export function Footer() {
           <p className="mt-3 text-sm text-[#e7bdb6]/70">{siteContent.brand.tagline}</p>
         </div>
         <div className="flex flex-col items-center justify-center gap-4 lg:flex-row lg:flex-nowrap lg:gap-5">
-          {siteContent.footerLinks.map((item) => (
-            <a
-              key={item}
-              href="#"
-              className="whitespace-nowrap text-xs uppercase tracking-[0.18em] text-[#e7bdb6]/70 hover:text-[#ffb4a8]"
-            >
-              {item}
-            </a>
-          ))}
+          {siteContent.footerLinks.map((item) => {
+            const className =
+              "whitespace-nowrap text-xs uppercase tracking-[0.18em] text-[#e7bdb6]/70 hover:text-[#ffb4a8]";
+            if (item.href.startsWith("/")) {
+              return (
+                <Link key={item.label} href={item.href} className={className}>
+                  {item.label}
+                </Link>
+              );
+            }
+            return (
+              <a key={item.label} href={item.href} className={`${className} cursor-pointer`}>
+                {item.label}
+              </a>
+            );
+          })}
         </div>
         <p className="text-center text-xs text-[#e5e2e1]/50 lg:text-right">
           © 2026 IMPOSSIBLE DOCUMENTARY. ALL RIGHTS RESERVED.

@@ -9,6 +9,7 @@ type ButtonProps = {
   rightIcon?: ReactNode;
   leftIcon?: ReactNode;
   onClick?: () => void;
+  type?: "button" | "submit";
 };
 
 const buttonBase =
@@ -30,6 +31,7 @@ export function Button({
   leftIcon,
   rightIcon,
   onClick,
+  type = "button",
 }: ButtonProps) {
   const classes = `${buttonBase} ${buttonVariants[variant]} ${className}`;
 
@@ -44,7 +46,7 @@ export function Button({
   }
 
   return (
-    <button type="button" onClick={onClick} className={classes}>
+    <button type={type} onClick={onClick} className={classes}>
       {leftIcon}
       {children}
       {rightIcon}

@@ -13,6 +13,7 @@ export type TeamMember = {
   role: string;
   bio: string;
   image: string;
+  imagePosition?: string;
 };
 
 export type SponsorBenefit = {
@@ -32,13 +33,26 @@ export type StorySlide = {
   caption: string;
 };
 
+export type Partner = {
+  name: string;
+  logo: string;
+};
+
+export type FooterLink = {
+  label: string;
+  href: string;
+};
+
 const trailerVideo = "/videos/WhatsApp Video 2026-07-04 at 21.07.42.mp4";
 const img = (name: string) => `/images/${name}`;
+const storyImg = (name: string) => `/images/story-images/${name}`;
+const featuredVideo = (file: string) => `/videos/featured/${file}`;
+const teamImg = (name: string) => `/images/team/${name}`;
 
 export const siteContent = {
   brand: {
     name: "IMPOSSIBLE",
-    tagline: "Redefining reality through the lens.",
+    tagline: "Hidden in plain sight. I'm possible.",
     logo: "/impossible-logo.png",
   },
   nav: [
@@ -61,9 +75,14 @@ export const siteContent = {
       { label: "Become a Partner", href: "#sponsorship", variant: "secondary" },
     ] satisfies CTA[],
   },
-  partners: ["A24", "NEON", "APPLE TV+", "HBO"],
+  partners: [
+    { name: "AMG Miami", logo: "/images/partners/amg-miami.png" },
+    { name: "Tricoast International", logo: "/tricoast_logo.png" },
+    { name: "Gtgym_hq", logo: "/images/partners/gtgym-hq.png" },
+    { name: "Trinity Boxing New York", logo: "/images/partners/trinity-boxing-new-york.png" },
+  ] satisfies Partner[],
   tricoast: {
-    title: "Tricaost Internation - LOI",
+    title: "Tricoast International - LOI",
     body: "Backed by a formal Letter of Intent, Tricoast International recognizes the groundbreaking potential of IMPOSSIBLE. Their belief in this project validates our commitment to capturing raw, unfiltered truth through the lens of uncompromising cinematic quality.",
     image: "/tricoast_logo.jpeg",
   },
@@ -73,42 +92,42 @@ export const siteContent = {
     slides: [
       {
         image: img("WhatsApp Image 2026-07-04 at 22.10.05 (3).jpeg"),
-        caption: "The chase begins.",
+        caption: "The story begins.",
       },
       {
-        image: img("1.jpg"),
+        image: storyImg("1.png"),
         caption: "The journey starts here.",
       },
       {
-        image: img("2.jpg"),
+        image: storyImg("2.png"),
         caption: "Every session counts.",
       },
       {
-        image: img("3.jpg"),
+        image: storyImg("3.png"),
         caption: "Built in the gym.",
       },
       {
-        image: img("4.jpg"),
+        image: storyImg("4.png"),
         caption: "Pressure creates progress.",
       },
       {
-        image: img("5.jpg"),
+        image: storyImg("5.png"),
         caption: "Eyes on the prize.",
       },
       {
-        image: img("6.jpg"),
+        image: storyImg("6.png"),
         caption: "The grind never stops.",
       },
       {
-        image: img("7.jpg"),
+        image: storyImg("7.png"),
         caption: "This story is still unfolding.",
       },
     ] satisfies StorySlide[],
   },
   featured: [
     {
-      title: "Instagram Post 01",
-      meta: "Featured · Social cut",
+      title: "IMPOSSIBLE Trailer",
+      meta: "Featured · Official trailer",
       image: img("WhatsApp Image 2026-07-04 at 22.09.54 (1).jpeg"),
       videoUrl: trailerVideo,
     },
@@ -116,13 +135,13 @@ export const siteContent = {
       title: "Instagram Post 02",
       meta: "Featured · Training",
       image: img("WhatsApp Image 2026-07-04 at 22.09.55 (1).jpeg"),
-      videoUrl: trailerVideo,
+      videoUrl: featuredVideo("post-02.mp4"),
     },
     {
       title: "Instagram Post 03",
       meta: "Featured · Mentality",
       image: img("WhatsApp Image 2026-07-04 at 22.09.47.jpeg"),
-      videoUrl: trailerVideo,
+      videoUrl: featuredVideo("post-03.mp4"),
     },
   ] satisfies VideoItem[],
   quote: {
@@ -159,39 +178,45 @@ export const siteContent = {
   team: [
     {
       name: "Ricco Rodriguez",
-      role: "Producer",
+      role: "Trainer",
       bio: "Former UFC Heavyweight Champion — bringing championship credibility, partnerships, and production firepower to IMPOSSIBLE.",
-      image: img("WhatsApp Image 2026-07-04 at 22.09.36.jpeg"),
+      image: teamImg("ricco-rodriguez.png"),
+      imagePosition: "center 15%",
     },
     {
       name: "Colin Dingelstad",
-      role: "Director / Subject",
-      bio: "At the center of the story — pursuing an MMA championship while documenting the climb in real time.",
-      image: img("WhatsApp Image 2026-07-04 at 22.09.37.jpeg"),
+      role: "Originator & Athlete",
+      bio: "Originator and athlete behind the documentary, taking on an unprecedented journey to answer if an ordinary person can become champion through total dedication, smart work, and world-class coaching.",
+      image: teamImg("colin-dingelstad.png"),
+      imagePosition: "center 20%",
     },
     {
       name: "Matt Cohen",
-      role: "Cinematography",
-      bio: "Shapes the visual language with cinematic discipline built for platforms that demand broadcast quality.",
+      role: "Director",
+      bio: "Award-winning Hollywood producer and director with decades of experience developing and producing feature films, documentaries, and television.",
       image: img("WhatsApp Image 2026-07-04 at 22.09.38.jpeg"),
+      imagePosition: "center top",
     },
     {
-      name: "Simon Rubensteijn",
-      role: "Production",
-      bio: "Keeps complex shoots moving with precision so every scene lands on time and on brand.",
-      image: img("WhatsApp Image 2026-07-04 at 22.09.39.jpeg"),
+      name: "Vi Angeli Lanot & team",
+      role: "Editorial & Narrative Director",
+      bio: "Vi and her team have decades of experience editing for some of the biggest social media and streaming brands in the world.",
+      image: teamImg("vi-angeli-lanot.jpg"),
+      imagePosition: "center top",
     },
     {
-      name: "Bobby",
-      role: "Creative Lead",
-      bio: "Owns the creative spine — from story beats to brand presence across film and social.",
-      image: img("WhatsApp Image 2026-07-04 at 22.09.40.jpeg"),
+      name: "Simon Rubenstein",
+      role: "Lead Cinematographer | Co-producer",
+      bio: "Award-winning producer, director, and cinematographer, and founder of Brooklyn Pictures Entertainment, with collaborations spanning Netflix, HBO, Disney, Marvel, Apple TV+, Sony, Lionsgate, Universal, and PBS.",
+      image: teamImg("simon-rubenstein.jpg"),
+      imagePosition: "center top",
     },
     {
       name: "Martin Snow",
-      role: "Owner, Trinity Boxing Gym",
-      bio: "Owner of Trinity Boxing Gym — featured across major fight content and a key figure guiding the real training world behind this story.",
-      image: img("WhatsApp Image 2026-07-04 at 22.09.41.jpeg"),
+      role: "Boxing Coach & Founder of Trinity Boxing Club",
+      bio: "Former heavyweight Golden Gloves champion and founder of Trinity Boxing Club, Martin brings decades of elite boxing experience and mentorship. A recognized boxing personality featured across major media productions.",
+      image: teamImg("martin-snow.png"),
+      imagePosition: "center 15%",
     },
   ] satisfies TeamMember[],
   partner: {
@@ -233,5 +258,10 @@ export const siteContent = {
     cta: "Become a Partner",
     background: img("WhatsApp Image 2026-07-04 at 22.09.42.jpeg"),
   },
-  footerLinks: ["Press Kit", "Privacy Policy", "Terms of Service", "Contact"],
+  footerLinks: [
+    { label: "Press Kit", href: "#" },
+    { label: "Privacy Policy", href: "/privacy-policy" },
+    { label: "Terms of Service", href: "/terms-of-service" },
+    { label: "Contact", href: "mailto:colin.dingelstad@gmail.com?subject=IMPOSSIBLE%20Contact" },
+  ] satisfies FooterLink[],
 };

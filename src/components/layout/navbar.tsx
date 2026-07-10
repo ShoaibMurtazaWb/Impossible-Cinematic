@@ -4,12 +4,14 @@ import { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
 import { siteContent } from "@/data/site-content";
 import { Button, Logo } from "@/components/ui/primitives";
+import { usePartnerModal } from "@/components/layout/partner-modal-provider";
 
 const navButtonClass =
   "shrink-0 whitespace-nowrap !px-[1.25rem] !py-[0.625rem] text-[0.6875rem] leading-none tracking-[0.16em]";
 
 export function Navbar() {
   const [open, setOpen] = useState(false);
+  const { openPartnerModal } = usePartnerModal();
 
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";
@@ -37,7 +39,7 @@ export function Navbar() {
       <div className="relative z-20 px-[1rem] py-[0.75rem] lg:px-[2rem] lg:py-[1rem] xl:px-[4rem]">
         <div className="flex min-w-0 items-center justify-between gap-[0.75rem] lg:gap-[1rem] xl:gap-[1.5rem]">
           <a href="#" className="relative z-20 shrink-0" aria-label="IMPOSSIBLE home" onClick={closeMenu}>
-            <Logo className="w-[100px] max-w-[100px] sm:w-[7.5rem] sm:max-w-[7.75rem] lg:w-[9rem] lg:max-w-[10.5rem] xl:w-[10rem] xl:max-w-[11.5rem]" />
+            <Logo className="w-[100px] max-w-[100px] sm:w-[7.5rem] sm:max-w-[7.75rem] lg:w-[9rem] lg:max-w-[10  .5rem] xl:w-[10rem] xl:max-w-[11.5rem]" />
           </a>
 
           <div className="hidden min-w-0 flex-1 items-center justify-center gap-[0.875rem] lg:flex xl:gap-[1.5rem]">
@@ -53,7 +55,7 @@ export function Navbar() {
           </div>
 
           <div className="relative z-30 flex shrink-0 items-center gap-2">
-            <Button href="#sponsorship" className={navButtonClass}>
+            <Button className={navButtonClass} onClick={openPartnerModal}>
               Join Project
             </Button>
 

@@ -10,6 +10,7 @@ import {
   type VideoItem,
 } from "@/data/site-content";
 import { Button, GlassCard, Logo, SectionHeading } from "@/components/ui/primitives";
+import { usePartnerModal } from "@/components/layout/partner-modal-provider";
 
 function VideoCard({
   item,
@@ -47,14 +48,15 @@ function VideoCard({
   );
 }
 
-function TeamCard({ name, role, bio, image }: TeamMember) {
+function TeamCard({ name, role, bio, image, imagePosition = "center" }: TeamMember) {
   return (
     <GlassCard className="group text-center transition-all duration-300 hover:scale-[1.02] hover:border-[#be0000]/50">
-      <div className="mx-auto mb-5 h-32 w-32 overflow-hidden rounded-full border border-white/10">
+      <div className="mx-auto mb-5 h-32 w-32 overflow-hidden rounded-full border border-white/10 bg-[#1a1a1a]">
         <img
           src={image}
           alt={name}
-          className="h-full w-full object-cover grayscale transition duration-500 group-hover:grayscale-0"
+          className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+          style={{ objectPosition: imagePosition }}
         />
       </div>
       <h3 className="font-display text-[2rem] uppercase text-[#e5e2e1] transition-colors group-hover:text-[#be0000]">
@@ -237,6 +239,7 @@ function StorySlider() {
 export function HomeSections() {
   const [activeVideo, setActiveVideo] = useState<VideoItem | null>(null);
   const [showStatementImage, setShowStatementImage] = useState(false);
+  const { openPartnerModal } = usePartnerModal();
   const featuredSliderRef = useRef<HTMLDivElement>(null);
   const heroVideoItem: VideoItem = {
     title: "Hero Trailer",
@@ -305,8 +308,14 @@ export function HomeSections() {
             {siteContent.hero.ctas.map((cta) => (
               <Button
                 key={cta.label}
-                href={cta.label === "Watch Trailer" ? undefined : cta.href}
-                onClick={cta.label === "Watch Trailer" ? () => setActiveVideo(heroVideoItem) : undefined}
+                href={cta.label === "Watch Trailer" || cta.label === "Become a Partner" ? undefined : cta.href}
+                onClick={
+                  cta.label === "Watch Trailer"
+                    ? () => setActiveVideo(heroVideoItem)
+                    : cta.label === "Become a Partner"
+                      ? openPartnerModal
+                      : undefined
+                }
                 variant={cta.variant === "secondary" ? "glass" : cta.variant}
               >
                 {cta.label}
@@ -319,13 +328,32 @@ export function HomeSections() {
       <section id="partners" className="border-y border-white/5 bg-[#0e0e0e] px-4 py-20 sm:py-24 lg:px-16 lg:py-28">
         <div className="mx-auto max-w-[1440px]">
           <p className="mb-8 text-center text-[10px] uppercase tracking-[0.2em] text-[#e7bdb6]/80 sm:mb-10 sm:text-xs lg:mb-12">
-            Production Partners
+            Our Partners
           </p>
-          <div className="grid grid-cols-2 place-items-center gap-x-6 gap-y-8 text-xl font-bold text-[#e5e2e1]/55 sm:gap-x-8 sm:gap-y-10 sm:text-2xl lg:flex lg:flex-wrap lg:justify-center lg:gap-24 lg:text-5xl">
+          <div className="grid grid-cols-2 place-items-center gap-x-6 gap-y-10 sm:gap-x-10 sm:gap-y-12 lg:flex lg:flex-wrap lg:justify-center lg:gap-x-16 lg:gap-y-10 xl:gap-x-24">
             {siteContent.partners.map((partner) => (
-              <span key={partner} className="whitespace-nowrap text-center">
-                {partner}
-              </span>
+              <div
+                key={partner.name}
+                className="group flex h-[3.5rem] w-full max-w-[10rem] items-center justify-center sm:h-[4rem] sm:max-w-[11rem] lg:h-[10.5rem] lg:max-w-[12rem]"
+              >
+                <img
+                  src={partner.logo}
+                  alt={partner.name}
+                  className="max-h-full max-w-full object-contain opacity-60 grayscale transition-all duration-500 group-hover:opacity-100 group-hover:grayscale-0"
+                  onError={(event) => {
+                    const target = event.currentTarget;
+                    target.style.display = "none";
+                    const fallback = target.nextElementSibling;
+                    if (fallback instanceof HTMLElement) fallback.style.display = "block";
+                  }}
+                />
+                <span
+                  className="hidden whitespace-nowrap text-center text-sm font-bold uppercase tracking-tight text-[#e5e2e1]/55 sm:text-base lg:text-lg"
+                  aria-hidden
+                >
+                  {partner.name}
+                </span>
+              </div>
             ))}
           </div>
         </div>
@@ -478,7 +506,7 @@ export function HomeSections() {
                 <p key={paragraph}>{paragraph}</p>
               ))}
             </div>
-            <Button className="mt-8" href="#sponsorship">
+            <Button className="mt-8" onClick={openPartnerModal}>
               {siteContent.partner.cta}
             </Button>
           </div>
@@ -503,7 +531,7 @@ export function HomeSections() {
           <h2 className="font-display text-6xl font-semibold uppercase tracking-normal leading-normal text-[#e5e2e1] md:text-8xl">
             {siteContent.finalCta.title}
           </h2>
-          <Button className="mt-8 px-10 py-4" href="#sponsorship">
+          <Button className="mt-8 px-10 py-4" onClick={openPartnerModal}>
             {siteContent.finalCta.cta}
           </Button>
         </div>
