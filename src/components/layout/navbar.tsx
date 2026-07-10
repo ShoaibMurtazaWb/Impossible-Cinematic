@@ -77,9 +77,8 @@ export function Navbar() {
       </div>
 
       <div
-        className={`relative z-10 grid transition-[grid-template-rows] duration-300 ease-out lg:hidden ${
-          open ? "grid-rows-[1fr]" : "pointer-events-none grid-rows-[0fr]"
-        }`}
+        className={`relative z-10 grid transition-[grid-template-rows] duration-300 ease-out lg:hidden ${open ? "grid-rows-[1fr]" : "pointer-events-none grid-rows-[0fr]"
+          }`}
       >
         <div className="overflow-hidden">
           <div className="pointer-events-auto border-t border-white/10 bg-[#131313]/98 px-[1rem] pb-[1.5rem] pt-[0.5rem]">

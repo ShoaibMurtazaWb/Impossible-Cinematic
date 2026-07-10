@@ -35,7 +35,7 @@ export type StorySlide = {
 
 export type Partner = {
   name: string;
-  logo: string;
+  logo?: string;
 };
 
 export type FooterLink = {
@@ -76,9 +76,9 @@ export const siteContent = {
     ] satisfies CTA[],
   },
   partners: [
-    { name: "AMG Miami", logo: "/images/partners/amg-miami.png" },
+    { name: "AMG Miami" },
     { name: "Tricoast International", logo: "/tricoast_logo.png" },
-    { name: "Gtgym_hq", logo: "/images/partners/gtgym-hq.png" },
+    { name: "Gtgym_hq" },
     { name: "Trinity Boxing New York", logo: "/images/partners/trinity-boxing-new-york.png" },
   ] satisfies Partner[],
   tricoast: {

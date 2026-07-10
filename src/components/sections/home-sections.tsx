@@ -330,29 +330,47 @@ export function HomeSections() {
           <p className="mb-8 text-center text-[10px] uppercase tracking-[0.2em] text-[#e7bdb6]/80 sm:mb-10 sm:text-xs lg:mb-12">
             Our Partners
           </p>
-          <div className="grid grid-cols-2 place-items-center gap-x-6 gap-y-10 sm:gap-x-10 sm:gap-y-12 lg:flex lg:flex-wrap lg:justify-center lg:gap-x-16 lg:gap-y-10 xl:gap-x-24">
+          <div className="grid grid-cols-2 place-items-center gap-x-6 gap-y-10 sm:gap-x-8 sm:gap-y-12 lg:flex lg:flex-nowrap lg:items-center lg:justify-center lg:gap-x-6 lg:gap-y-0 xl:gap-x-10">
             {siteContent.partners.map((partner) => (
               <div
                 key={partner.name}
-                className="group flex h-[3.5rem] w-full max-w-[10rem] items-center justify-center sm:h-[4rem] sm:max-w-[11rem] lg:h-[10.5rem] lg:max-w-[12rem]"
+                className="group flex h-[4.5rem] w-full max-w-[10.5rem] items-center justify-center sm:h-[5rem] sm:max-w-[11.5rem] lg:h-[5.5rem] lg:w-[12.5rem] lg:max-w-[12.5rem] lg:shrink-0 xl:h-[10rem] xl:w-[20rem] xl:max-w-[20rem]"
               >
-                <img
-                  src={partner.logo}
-                  alt={partner.name}
-                  className="max-h-full max-w-full object-contain opacity-60 grayscale transition-all duration-500 group-hover:opacity-100 group-hover:grayscale-0"
-                  onError={(event) => {
-                    const target = event.currentTarget;
-                    target.style.display = "none";
-                    const fallback = target.nextElementSibling;
-                    if (fallback instanceof HTMLElement) fallback.style.display = "block";
-                  }}
-                />
-                <span
-                  className="hidden whitespace-nowrap text-center text-sm font-bold uppercase tracking-tight text-[#e5e2e1]/55 sm:text-base lg:text-lg"
-                  aria-hidden
-                >
-                  {partner.name}
-                </span>
+                <div className="relative flex h-full w-full items-center justify-center overflow-hidden rounded-xl border border-white/20 bg-white/90 px-3 py-2 shadow-[0_8px_24px_rgba(0,0,0,0.18)] backdrop-blur-md transition-transform duration-300 group-hover:scale-[1.03] sm:rounded-2xl sm:px-4 sm:py-3">
+                  {partner.logo ? (
+                    <>
+                      <img
+                        src={partner.logo}
+                        alt=""
+                        aria-hidden
+                        className="pointer-events-none absolute inset-0 m-auto h-full w-full scale-125 object-contain opacity-30 blur-lg"
+                      />
+                      <img
+                        src={partner.logo}
+                        alt={partner.name}
+                        className="relative z-10 max-h-full max-w-full object-contain"
+                        onError={(event) => {
+                          const target = event.currentTarget;
+                          target.style.display = "none";
+                          const blurred = target.previousElementSibling;
+                          if (blurred instanceof HTMLElement) blurred.style.display = "none";
+                          const fallback = target.nextElementSibling;
+                          if (fallback instanceof HTMLElement) fallback.style.display = "block";
+                        }}
+                      />
+                      <span
+                        className="relative z-10 hidden px-1 text-center text-[10px] font-bold uppercase leading-tight tracking-tight text-[#131313]/70 sm:text-xs"
+                        aria-hidden
+                      >
+                        {partner.name}
+                      </span>
+                    </>
+                  ) : (
+                    <span className="relative z-10 px-1 text-center text-[10px] font-bold uppercase leading-tight tracking-tight text-[#131313]/60 sm:text-xs">
+                      {partner.name}
+                    </span>
+                  )}
+                </div>
               </div>
             ))}
           </div>
