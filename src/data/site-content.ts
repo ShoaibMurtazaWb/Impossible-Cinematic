@@ -98,6 +98,55 @@ export const assets = {
   },
 } as const;
 
+/** Featured Visionaries shown on the homepage (6 only). */
+const homepageTeam: TeamMember[] = [
+  {
+    name: "Ricco Rodriguez",
+    role: "Trainer",
+    bio: "Former UFC Heavyweight Champion — bringing championship credibility, partnerships, and production firepower to IMPOSSIBLE.",
+    image: assets.images.team.riccoRodriguez,
+    imagePosition: "center 15%",
+  },
+  {
+    name: "Colin Dingelstad",
+    role: "Originator & Athlete",
+    bio: "Originator and athlete behind the documentary, taking on an unprecedented journey to answer if an ordinary person can become champion through total dedication, smart work, and world-class coaching.",
+    image: assets.images.team.colinDingelstad,
+    imagePosition: "center 20%",
+  },
+  {
+    name: "Matt Cohen",
+    role: "Director",
+    bio: "Award-winning Hollywood producer and director with decades of experience developing and producing feature films, documentaries, and television.",
+    image: assets.images.team.mattCohen,
+    imagePosition: "center top",
+  },
+  {
+    name: "Vi Angeli Lanot & team",
+    role: "Editorial & Narrative Director",
+    bio: "Vi and her team have decades of experience editing for some of the biggest social media and streaming brands in the world.",
+    image: assets.images.team.viAngeliLanot,
+    imagePosition: "center 12%",
+  },
+  {
+    name: "Simon Rubenstein",
+    role: "Lead Cinematographer | Co-producer",
+    bio: "Award-winning producer, director, and cinematographer, and founder of Brooklyn Pictures Entertainment, with collaborations spanning Netflix, HBO, Disney, Marvel, Apple TV+, Sony, Lionsgate, Universal, and PBS.",
+    image: assets.images.team.simonRubenstein,
+    imagePosition: "center 18%",
+  },
+  {
+    name: "Martin Snow",
+    role: "Boxing Coach & Founder of Trinity Boxing Club",
+    bio: "Former heavyweight Golden Gloves champion and founder of Trinity Boxing Club, Martin brings decades of elite boxing experience and mentorship. A recognized boxing personality featured across major media productions.",
+    image: assets.images.team.martinSnow,
+    imagePosition: "center 15%",
+  },
+];
+
+/** Extra members listed only on /team — add new people here. */
+const additionalTeamMembers: TeamMember[] = [];
+
 export const siteContent = {
   brand: {
     name: "IMPOSSIBLE",
@@ -109,7 +158,7 @@ export const siteContent = {
     { label: "Story", href: "/#story" },
     { label: "Featured", href: "/#featured" },
     { label: "Results", href: "/#results" },
-    { label: "Team", href: "/#team" },
+    { label: "Team", href: "/team" },
     { label: "Sponsorship", href: "/#sponsorship" },
   ] satisfies NavItem[],
   hero: {
@@ -237,50 +286,12 @@ export const siteContent = {
       },
     ] satisfies ResultStat[],
   },
-  team: [
-    {
-      name: "Ricco Rodriguez",
-      role: "Trainer",
-      bio: "Former UFC Heavyweight Champion — bringing championship credibility, partnerships, and production firepower to IMPOSSIBLE.",
-      image: assets.images.team.riccoRodriguez,
-      imagePosition: "center 15%",
-    },
-    {
-      name: "Colin Dingelstad",
-      role: "Originator & Athlete",
-      bio: "Originator and athlete behind the documentary, taking on an unprecedented journey to answer if an ordinary person can become champion through total dedication, smart work, and world-class coaching.",
-      image: assets.images.team.colinDingelstad,
-      imagePosition: "center 20%",
-    },
-    {
-      name: "Matt Cohen",
-      role: "Director",
-      bio: "Award-winning Hollywood producer and director with decades of experience developing and producing feature films, documentaries, and television.",
-      image: assets.images.team.mattCohen,
-      imagePosition: "center top",
-    },
-    {
-      name: "Vi Angeli Lanot & team",
-      role: "Editorial & Narrative Director",
-      bio: "Vi and her team have decades of experience editing for some of the biggest social media and streaming brands in the world.",
-      image: assets.images.team.viAngeliLanot,
-      imagePosition: "center 12%",
-    },
-    {
-      name: "Simon Rubenstein",
-      role: "Lead Cinematographer | Co-producer",
-      bio: "Award-winning producer, director, and cinematographer, and founder of Brooklyn Pictures Entertainment, with collaborations spanning Netflix, HBO, Disney, Marvel, Apple TV+, Sony, Lionsgate, Universal, and PBS.",
-      image: assets.images.team.simonRubenstein,
-      imagePosition: "center 18%",
-    },
-    {
-      name: "Martin Snow",
-      role: "Boxing Coach & Founder of Trinity Boxing Club",
-      bio: "Former heavyweight Golden Gloves champion and founder of Trinity Boxing Club, Martin brings decades of elite boxing experience and mentorship. A recognized boxing personality featured across major media productions.",
-      image: assets.images.team.martinSnow,
-      imagePosition: "center 15%",
-    },
-  ] satisfies TeamMember[],
+  team: homepageTeam,
+  teamPage: {
+    title: "The Visionaries",
+    subtitle: "Award-winning talent dedicated to crafting an unprecedented narrative experience.",
+    members: [...homepageTeam, ...additionalTeamMembers],
+  },
   partner: {
     title: "More Than a Sponsor.",
     intro: "Every great story has people who believed in it before anyone else.",
@@ -321,6 +332,7 @@ export const siteContent = {
     background: assets.images.sections.finalCtaBackground,
   },
   footerLinks: [
+    { label: "Team", href: "/team" },
     { label: "Press Kit", href: "/" },
     { label: "Privacy Policy", href: "/privacy-policy" },
     { label: "Terms of Service", href: "/terms-of-service" },
