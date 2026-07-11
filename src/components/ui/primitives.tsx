@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import Image from "next/image";
 import { siteContent } from "@/data/site-content";
 
 type ButtonProps = {
@@ -89,12 +90,20 @@ export function GlassCard({
   );
 }
 
-export function Logo({ className = "" }: { className?: string }) {
+export function Logo({
+  className = "",
+  priority = false,
+}: {
+  className?: string;
+  priority?: boolean;
+}) {
   return (
-    // eslint-disable-next-line @next/next/no-img-element
-    <img
+    <Image
       src={siteContent.brand.logo}
       alt={`${siteContent.brand.name} logo`}
+      width={1106}
+      height={184}
+      priority={priority}
       className={`block h-auto max-w-full min-w-0 object-contain ${className}`}
     />
   );

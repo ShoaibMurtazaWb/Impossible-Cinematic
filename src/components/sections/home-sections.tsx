@@ -1,7 +1,7 @@
-/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import { ChevronLeft, ChevronRight, Diamond, Film, Globe, Megaphone, Play, X } from "lucide-react";
 import {
   siteContent,
@@ -11,6 +11,47 @@ import {
 } from "@/data/site-content";
 import { Button, GlassCard, Logo, SectionHeading } from "@/components/ui/primitives";
 import { usePartnerModal } from "@/components/layout/partner-modal-provider";
+import {
+  getScrollBehavior,
+  usePrefersReducedMotion,
+} from "@/lib/use-prefers-reduced-motion";
+import { useFocusTrap } from "@/lib/use-focus-trap";
+
+function SectionBackground({
+  src,
+  alt,
+  gradient,
+  fixed = false,
+}: {
+  src: string;
+  alt: string;
+  gradient: string;
+  fixed?: boolean;
+}) {
+  if (fixed) {
+    return (
+      <div
+        className="absolute inset-0"
+        style={{
+          backgroundImage: `url("${src}")`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundAttachment: "fixed",
+        }}
+        aria-hidden
+      >
+        <div className={`absolute inset-0 ${gradient}`} />
+      </div>
+    );
+  }
+
+  return (
+    <div className="absolute inset-0">
+      <Image src={src} alt={alt} fill className="object-cover" sizes="100vw" />
+      <div className={`absolute inset-0 ${gradient}`} />
+    </div>
+  );
+}
 
 function VideoCard({
   item,
@@ -25,14 +66,15 @@ function VideoCard({
       onClick={() => onPlay(item)}
     >
       <div className="relative mb-6 h-[410px] overflow-hidden rounded-xl border border-white/10 bg-[#ffffff06]">
-        <div
-          className="absolute inset-0 transition-transform duration-700 group-hover:scale-110"
-          style={{
-            backgroundImage: `url("${item.image}")`,
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-          }}
-        />
+        <div className="absolute inset-0 transition-transform duration-700 group-hover:scale-110">
+          <Image
+            src={item.image}
+            alt={item.title}
+            fill
+            className="object-cover"
+            sizes="(min-width: 768px) 600px, 85vw"
+          />
+        </div>
         <div className="absolute inset-0 bg-black/45 transition-colors group-hover:bg-black/20" />
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="grid h-20 w-20 place-items-center rounded-full border border-white/30 bg-black/45 text-[#be0000] backdrop-blur-md transition-all duration-500 group-hover:scale-110 group-hover:border-[#be0000]">
@@ -51,11 +93,13 @@ function VideoCard({
 function TeamCard({ name, role, bio, image, imagePosition = "center" }: TeamMember) {
   return (
     <GlassCard className="group text-center transition-all duration-300 hover:scale-[1.02] hover:border-[#be0000]/50">
-      <div className="mx-auto mb-5 h-32 w-32 overflow-hidden rounded-full border border-white/10 bg-[#1a1a1a]">
-        <img
+      <div className="relative mx-auto mb-5 h-32 w-32 overflow-hidden rounded-full border border-white/10 bg-[#1a1a1a]">
+        <Image
           src={image}
           alt={name}
-          className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+          fill
+          sizes="128px"
+          className="object-cover transition duration-500 group-hover:scale-105"
           style={{ objectPosition: imagePosition }}
         />
       </div>
@@ -88,6 +132,7 @@ function BenefitCard({ title, description, icon }: SponsorBenefit) {
 }
 
 function StorySlider() {
+  const prefersReducedMotion = usePrefersReducedMotion();
   const slides = siteContent.story.slides;
   const viewportRef = useRef<HTMLDivElement>(null);
   const holdTimeoutRef = useRef<number | null>(null);
@@ -118,6 +163,7 @@ function StorySlider() {
     clearHold();
     const step = direction === "prev" ? goPrev : goNext;
     step();
+    if (prefersReducedMotion) return;
     holdTimeoutRef.current = window.setTimeout(() => {
       holdIntervalRef.current = window.setInterval(step, 380);
     }, 280);
@@ -166,17 +212,19 @@ function StorySlider() {
         onPointerCancel={endDrag}
       >
         <div
-          className={`flex h-full w-full ${isDragging ? "" : "transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]"}`}
+          className={`flex h-full w-full ${isDragging || prefersReducedMotion ? "" : "transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]"}`}
           style={{
             transform: `translateX(calc(-${index * 100}% + ${dragOffset}%))`,
           }}
         >
           {slides.map((slide) => (
             <div key={slide.image} className="relative h-full w-full shrink-0 grow-0 basis-full">
-              <img
+              <Image
                 src={slide.image}
                 alt={slide.caption}
-                className="pointer-events-none h-full w-full object-cover select-none"
+                fill
+                className="pointer-events-none object-cover select-none"
+                sizes="(min-width: 1024px) 1024px, 100vw"
                 draggable={false}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
@@ -240,7 +288,10 @@ export function HomeSections() {
   const [activeVideo, setActiveVideo] = useState<VideoItem | null>(null);
   const [showStatementImage, setShowStatementImage] = useState(false);
   const { openPartnerModal } = usePartnerModal();
+  const prefersReducedMotion = usePrefersReducedMotion();
   const featuredSliderRef = useRef<HTMLDivElement>(null);
+  const videoModalRef = useFocusTrap<HTMLDivElement>(Boolean(activeVideo));
+  const statementModalRef = useFocusTrap<HTMLDivElement>(showStatementImage);
   const heroVideoItem: VideoItem = {
     title: "Hero Trailer",
     meta: "Background video",
@@ -254,7 +305,7 @@ export function HomeSections() {
     const amount = Math.max(slider.clientWidth * 0.8, 420);
     slider.scrollBy({
       left: direction === "next" ? amount : -amount,
-      behavior: "smooth",
+      behavior: getScrollBehavior(prefersReducedMotion),
     });
   };
 
@@ -272,7 +323,7 @@ export function HomeSections() {
 
   return (
     <main className="overflow-x-hidden">
-      <section className="relative flex min-h-screen w-full items-center justify-center overflow-hidden px-4 pb-24 pt-28 md:px-16 md:pt-36">
+      <section id="hero" className="relative flex min-h-screen w-full snap-start items-center justify-center overflow-hidden px-4 pb-24 pt-28 md:px-16 md:pt-36">
         <div
           className="absolute inset-0 cursor-pointer film-grain"
           onClick={() => setActiveVideo(heroVideoItem)}
@@ -282,9 +333,9 @@ export function HomeSections() {
             className="absolute inset-0 h-full w-full scale-105 object-cover md:scale-110"
             src={siteContent.hero.video}
             poster={siteContent.hero.poster}
-            autoPlay
+            autoPlay={!prefersReducedMotion}
             muted
-            loop
+            loop={!prefersReducedMotion}
             playsInline
           />
           <div className="absolute inset-0 bg-gradient-to-b from-[#131313]/80 via-[#131313]/45 to-[#131313]" />
@@ -292,7 +343,7 @@ export function HomeSections() {
         </div>
         <div className="relative z-10 flex w-full min-w-0 max-w-4xl flex-col items-center px-2 text-center sm:px-4">
           <div className="w-full min-w-0 px-2">
-            <Logo className="mx-auto w-full drop-shadow-2xl" />
+            <Logo priority className="mx-auto w-full drop-shadow-2xl" />
           </div>
           <div className="mx-auto mt-8 w-full min-w-0 max-w-2xl space-y-3">
             {siteContent.hero.lines.map((line) => (
@@ -325,7 +376,7 @@ export function HomeSections() {
         </div>
       </section>
 
-      <section id="partners" className="border-y border-white/5 bg-[#0e0e0e] px-4 py-20 sm:py-24 lg:px-16 lg:py-28">
+      <section id="partners" className="snap-start border-y border-white/5 bg-[#0e0e0e] px-4 py-20 sm:py-24 lg:px-16 lg:py-28">
         <div className="mx-auto max-w-[1440px]">
           <p className="mb-8 text-center text-[10px] uppercase tracking-[0.2em] text-[#e7bdb6]/80 sm:mb-10 sm:text-xs lg:mb-12">
             Our Partners
@@ -339,16 +390,20 @@ export function HomeSections() {
                 <div className="relative flex h-full w-full items-center justify-center overflow-hidden rounded-xl border border-white/20 bg-white/90 px-3 py-2 shadow-[0_8px_24px_rgba(0,0,0,0.18)] backdrop-blur-md transition-transform duration-300 group-hover:scale-[1.03] sm:rounded-2xl sm:px-4 sm:py-3">
                   {partner.logo ? (
                     <>
-                      <img
+                      <Image
                         src={partner.logo}
                         alt=""
                         aria-hidden
-                        className="pointer-events-none absolute inset-0 m-auto h-full w-full scale-125 object-contain opacity-30 blur-lg"
+                        fill
+                        className="pointer-events-none scale-125 object-contain opacity-30 blur-lg"
+                        sizes="320px"
                       />
-                      <img
+                      <Image
                         src={partner.logo}
                         alt={partner.name}
-                        className="relative z-10 max-h-full max-w-full object-contain"
+                        fill
+                        className="z-10 object-contain"
+                        sizes="320px"
                         onError={(event) => {
                           const target = event.currentTarget;
                           target.style.display = "none";
@@ -377,14 +432,16 @@ export function HomeSections() {
         </div>
       </section>
 
-      <section className="flex min-h-screen items-center bg-[#131313] px-4 py-24 md:px-16">
+      <section className="flex min-h-screen snap-start items-center bg-[#131313] px-4 py-24 md:px-16">
         <div className="mx-auto grid max-w-[1440px] gap-8 md:grid-cols-12 md:items-center">
           <div className="group md:col-span-7">
-            <div className="h-[620px] overflow-hidden rounded-2xl border border-white/10 transition-transform duration-700 group-hover:scale-[1.02]">
-              <img
+            <div className="relative h-[620px] overflow-hidden rounded-2xl border border-white/10 transition-transform duration-700 group-hover:scale-[1.02]">
+              <Image
                 src={siteContent.tricoast.image}
                 alt={siteContent.tricoast.title}
-                className="h-full w-full object-cover object-center"
+                fill
+                className="object-cover object-center"
+                sizes="(min-width: 768px) 58vw, 100vw"
               />
             </div>
           </div>
@@ -408,14 +465,14 @@ export function HomeSections() {
         </div>
       </section>
 
-      <section id="story" className="min-h-screen border-t border-white/5 bg-[#131313] px-4 py-24 md:px-16">
+      <section id="story" className="min-h-screen snap-start border-t border-white/5 bg-[#131313] px-4 py-24 md:px-16">
         <div className="mx-auto max-w-[1440px]">
           <SectionHeading title={siteContent.story.title} subtitle={siteContent.story.subtitle} />
           <StorySlider />
         </div>
       </section>
 
-      <section id="featured" className="min-h-screen border-y border-white/5 bg-[#0e0e0e] px-4 py-24 md:px-16">
+      <section id="featured" className="min-h-screen snap-start border-y border-white/5 bg-[#0e0e0e] px-4 py-24 md:px-16">
         <div className="mx-auto max-w-[1440px]">
           <div className="mb-8 flex flex-col gap-6 sm:mb-14 sm:flex-row sm:items-end sm:justify-between">
             <div>
@@ -452,15 +509,12 @@ export function HomeSections() {
         </div>
       </section>
 
-      <section className="relative flex min-h-screen items-center overflow-hidden px-4 py-28 text-center md:px-16">
-        <div
-          className="absolute inset-0"
-          style={{
-            backgroundImage: `linear-gradient(to bottom, rgba(19,19,19,.8), rgba(19,19,19,.95)), url("${siteContent.quote.background}")`,
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-            backgroundAttachment: "fixed",
-          }}
+      <section className="relative flex min-h-screen snap-start items-center overflow-hidden px-4 py-28 text-center md:px-16">
+        <SectionBackground
+          src={siteContent.quote.background}
+          alt=""
+          gradient="bg-gradient-to-b from-[#131313]/80 to-[#131313]/95"
+          fixed={!prefersReducedMotion}
         />
         <div className="relative mx-auto max-w-3xl">
           <p className="font-display text-3xl uppercase leading-tight text-[#e5e2e1] md:text-[3.2rem]">
@@ -471,15 +525,12 @@ export function HomeSections() {
 
       <section
         id="results"
-        className="relative flex min-h-screen items-center overflow-hidden border-y border-white/5 px-4 py-24 md:px-16"
+        className="relative flex min-h-screen snap-start items-center overflow-hidden border-y border-white/5 px-4 py-24 md:px-16"
       >
-        <div
-          className="absolute inset-0"
-          style={{
-            backgroundImage: `linear-gradient(to bottom, rgba(14,14,14,.88), rgba(14,14,14,.96)), url("${siteContent.results.background}")`,
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-          }}
+        <SectionBackground
+          src={siteContent.results.background}
+          alt=""
+          gradient="bg-gradient-to-b from-[#0e0e0e]/88 to-[#0e0e0e]/96"
         />
         <div className="relative mx-auto max-w-[1440px]">
           <SectionHeading title={siteContent.results.title} subtitle={siteContent.results.subtitle} />
@@ -495,7 +546,7 @@ export function HomeSections() {
         </div>
       </section>
 
-      <section id="team" className="flex min-h-screen items-center bg-[#131313] px-4 py-24 md:px-16">
+      <section id="team" className="flex min-h-screen snap-start items-center bg-[#131313] px-4 py-24 md:px-16">
         <div className="mx-auto max-w-[1440px]">
           <SectionHeading
             title="The Visionaries"
@@ -511,7 +562,7 @@ export function HomeSections() {
 
       <section
         id="sponsorship"
-        className="flex min-h-screen items-center border-y border-white/10 bg-[#0e0e0e] px-4 py-24 md:px-16"
+        className="flex min-h-screen snap-start items-center border-y border-white/10 bg-[#0e0e0e] px-4 py-24 md:px-16"
       >
         <div className="mx-auto grid max-w-[1440px] gap-10 lg:grid-cols-12">
           <div className="lg:col-span-5">
@@ -536,14 +587,11 @@ export function HomeSections() {
         </div>
       </section>
 
-      <section className="relative flex min-h-screen items-center overflow-hidden px-4 py-28 text-center md:px-16">
-        <div
-          className="absolute inset-0"
-          style={{
-            backgroundImage: `linear-gradient(to bottom, rgba(19,19,19,.75), rgba(19,19,19,.95)), url("${siteContent.finalCta.background}")`,
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-          }}
+      <section className="relative flex min-h-screen snap-start items-center overflow-hidden px-4 py-28 text-center md:px-16">
+        <SectionBackground
+          src={siteContent.finalCta.background}
+          alt=""
+          gradient="bg-gradient-to-b from-[#131313]/75 to-[#131313]/95"
         />
         <div className="relative mx-auto max-w-3xl">
           <h2 className="font-display text-6xl font-semibold uppercase tracking-normal leading-normal text-[#e5e2e1] md:text-8xl">
@@ -561,12 +609,18 @@ export function HomeSections() {
           onClick={() => setActiveVideo(null)}
         >
           <div
-            className="relative w-full max-w-5xl rounded-2xl border border-white/20 bg-[#131313]"
+            ref={videoModalRef}
+            role="dialog"
+            aria-modal="true"
+            aria-label={activeVideo.title}
+            tabIndex={-1}
+            className="relative w-full max-w-5xl rounded-2xl border border-white/20 bg-[#131313] outline-none"
             onClick={(event) => event.stopPropagation()}
           >
             <button
               type="button"
               onClick={() => setActiveVideo(null)}
+              aria-label="Close video"
               className="absolute right-3 top-3 z-10 cursor-pointer rounded-full border border-white/20 bg-black/40 p-2 text-white hover:text-[#ffb4a8]"
             >
               <X size={20} />
@@ -582,21 +636,31 @@ export function HomeSections() {
           onClick={() => setShowStatementImage(false)}
         >
           <div
-            className="relative flex h-screen w-screen items-center justify-center bg-black/25"
+            ref={statementModalRef}
+            role="dialog"
+            aria-modal="true"
+            aria-label="Matt Cohen IMPOSSIBLE LOI statement"
+            tabIndex={-1}
+            className="relative flex h-screen w-screen items-center justify-center bg-black/25 outline-none"
             onClick={(event) => event.stopPropagation()}
           >
             <button
               type="button"
               onClick={() => setShowStatementImage(false)}
+              aria-label="Close statement"
               className="absolute right-4 top-4 z-10 cursor-pointer rounded-full border border-white/20 bg-black/40 p-2 text-white hover:text-[#ffb4a8]"
             >
               <X size={20} />
             </button>
-            <img
-              src="/images/matt cohen impossible LOI_image.jpg"
-              alt="Matt Cohen IMPOSSIBLE LOI statement"
-              className="max-h-[94vh] max-w-[96vw] object-contain"
-            />
+            <div className="relative h-[94vh] w-[96vw]">
+              <Image
+                src={siteContent.tricoast.loiStatement}
+                alt="Matt Cohen IMPOSSIBLE LOI statement"
+                fill
+                className="object-contain"
+                sizes="96vw"
+              />
+            </div>
           </div>
         </div>
       ) : null}

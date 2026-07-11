@@ -1,9 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { Menu, X } from "lucide-react";
 import { siteContent } from "@/data/site-content";
 import { Button, Logo } from "@/components/ui/primitives";
+import { HomeLogoLink } from "@/components/layout/home-logo-link";
 import { usePartnerModal } from "@/components/layout/partner-modal-provider";
 
 const navButtonClass =
@@ -38,19 +40,19 @@ export function Navbar() {
     <nav className="sticky top-0 z-50 border-b border-white/10 bg-[#131313]/90 backdrop-blur-xl">
       <div className="relative z-20 px-[1rem] py-[0.75rem] lg:px-[2rem] lg:py-[1rem] xl:px-[4rem]">
         <div className="flex min-w-0 items-center justify-between gap-[0.75rem] lg:gap-[1rem] xl:gap-[1.5rem]">
-          <a href="#" className="relative z-20 shrink-0" aria-label="IMPOSSIBLE home" onClick={closeMenu}>
-            <Logo className="w-[100px] max-w-[100px] sm:w-[7.5rem] sm:max-w-[7.75rem] lg:w-[9rem] lg:max-w-[10  .5rem] xl:w-[10rem] xl:max-w-[11.5rem]" />
-          </a>
+          <HomeLogoLink className="relative z-20 shrink-0" onNavigate={closeMenu}>
+            <Logo className="w-[100px] max-w-[100px] sm:w-[7.5rem] sm:max-w-[7.75rem] lg:w-[9rem] lg:max-w-[10.5rem] xl:w-[10rem] xl:max-w-[11.5rem]" />
+          </HomeLogoLink>
 
           <div className="hidden min-w-0 flex-1 items-center justify-center gap-[0.875rem] lg:flex xl:gap-[1.5rem]">
             {siteContent.nav.map((item) => (
-              <a
+              <Link
                 key={item.href}
                 href={item.href}
                 className="whitespace-nowrap text-[0.625rem] uppercase tracking-[0.14em] text-[#e5e2e1]/70 hover:text-[#e5e2e1] xl:text-[0.75rem] xl:tracking-[0.18em]"
               >
                 {item.label}
-              </a>
+              </Link>
             ))}
           </div>
 
@@ -84,14 +86,14 @@ export function Navbar() {
           <div className="pointer-events-auto border-t border-white/10 bg-[#131313]/98 px-[1rem] pb-[1.5rem] pt-[0.5rem]">
             <div className="flex flex-col gap-[0.25rem]">
               {siteContent.nav.map((item) => (
-                <a
+                <Link
                   key={item.href}
                   href={item.href}
                   onClick={closeMenu}
                   className="rounded-lg px-[0.75rem] py-[0.75rem] text-[0.875rem] uppercase tracking-[0.18em] text-[#e5e2e1]/80 transition-colors hover:bg-white/5 hover:text-[#e5e2e1]"
                 >
                   {item.label}
-                </a>
+                </Link>
               ))}
             </div>
           </div>

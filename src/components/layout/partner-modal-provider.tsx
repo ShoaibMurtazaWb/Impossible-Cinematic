@@ -3,6 +3,7 @@
 import { createContext, useCallback, useContext, useEffect, useState, type ReactNode } from "react";
 import { X } from "lucide-react";
 import { Button } from "@/components/ui/primitives";
+import { useFocusTrap } from "@/lib/use-focus-trap";
 
 const PARTNER_EMAIL = "colin.dingelstad@gmail.com";
 
@@ -29,6 +30,7 @@ function PartnerFormModal({ onClose }: { onClose: () => void }) {
   const [company, setCompany] = useState("");
   const [subject, setSubject] = useState("");
   const [message, setMessage] = useState("");
+  const dialogRef = useFocusTrap<HTMLDivElement>(true);
 
   useEffect(() => {
     const onEsc = (event: KeyboardEvent) => {
@@ -59,7 +61,12 @@ function PartnerFormModal({ onClose }: { onClose: () => void }) {
       onClick={onClose}
     >
       <div
-        className="relative w-full max-w-lg rounded-2xl border border-white/15 bg-[#131313] p-6 shadow-[0_20px_60px_rgba(0,0,0,0.5)] md:p-8"
+        ref={dialogRef}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="partner-modal-title"
+        tabIndex={-1}
+        className="relative w-full max-w-lg rounded-2xl border border-white/15 bg-[#131313] p-6 shadow-[0_20px_60px_rgba(0,0,0,0.5)] outline-none md:p-8"
         onClick={(event) => event.stopPropagation()}
       >
         <button
@@ -71,7 +78,7 @@ function PartnerFormModal({ onClose }: { onClose: () => void }) {
           <X size={20} />
         </button>
 
-        <h2 className="font-display text-3xl uppercase text-[#e5e2e1]">Become a Partner</h2>
+        <h2 id="partner-modal-title" className="font-display text-3xl uppercase text-[#e5e2e1]">Become a Partner</h2>
         <p className="mt-2 text-sm text-[#e7bdb6]/80">
           Share your details and we&apos;ll open an email to Colin with your message.
         </p>

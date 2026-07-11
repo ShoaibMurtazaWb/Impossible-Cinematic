@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Anton, Inter, JetBrains_Mono } from "next/font/google";
+import { Anton, Inter } from "next/font/google";
 import { siteContent } from "@/data/site-content";
 import "./globals.css";
 
@@ -11,11 +11,6 @@ const anton = Anton({
 
 const inter = Inter({
   variable: "--font-inter",
-  subsets: ["latin"],
-});
-
-const jetBrainsMono = JetBrains_Mono({
-  variable: "--font-jetbrains-mono",
   subsets: ["latin"],
 });
 
@@ -42,7 +37,7 @@ export const metadata: Metadata = {
     siteName: brand.name,
     images: [
       {
-        url: "/og.png",
+        url: "/brand/og.png",
         width: 2048,
         height: 1366,
         alt: `${brand.name} — ${brand.tagline}`,
@@ -55,7 +50,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: `${brand.name} | Premium Documentary`,
     description: siteDescription,
-    images: ["/og.png"],
+    images: ["/brand/og.png"],
   },
 };
 
@@ -67,7 +62,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${anton.variable} ${inter.variable} ${jetBrainsMono.variable} h-full scroll-smooth antialiased`}
+      className={`${anton.variable} ${inter.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">{children}</body>
     </html>
