@@ -36,6 +36,7 @@ export type StorySlide = {
 export type Partner = {
   name: string;
   logo?: string;
+  logoScale?: number;
 };
 
 export type FooterLink = {
@@ -176,7 +177,7 @@ export const siteContent = {
   partners: [
     { name: "AMG Miami", logo: assets.images.partners.amgMiami },
     { name: "Tricoast International", logo: assets.images.partners.tricoastInternational },
-    { name: "Gtgym_hq", logo: assets.images.partners.gtgymHq },
+    { name: "Gtgym_hq", logo: assets.images.partners.gtgymHq, logoScale: 1.2 },
     { name: "Trinity Boxing New York", logo: assets.images.partners.trinityBoxingNewYork },
   ] satisfies Partner[],
   tricoast: {
