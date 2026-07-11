@@ -66,14 +66,16 @@ export const assets = {
       loiStatement: "/images/tricoast/loi-statement.jpg",
     },
     story: {
-      slide01Intro: "/images/story/slide-01-intro.jpeg",
-      slide02: "/images/story/slide-02.png",
-      slide03: "/images/story/slide-03.png",
-      slide04: "/images/story/slide-04.png",
-      slide05: "/images/story/slide-05.png",
-      slide06: "/images/story/slide-06.png",
-      slide07: "/images/story/slide-07.png",
-      slide08: "/images/story/slide-08.png",
+      image1: "/images/story/image1.jpg",
+      image2: "/images/story/image2.png",
+      image3: "/images/story/image3.png",
+      image4: "/images/story/image4.jpg",
+      image5: "/images/story/image5.jpg",
+      image6: "/images/story/image6.jpg",
+      image7: "/images/story/image7.jpg",
+      image8: "/images/story/image8.png",
+      image9: "/images/story/image9.jpg",
+      image10: "/images/story/image10.jpg",
     },
     featured: {
       trailerThumbnail: "/images/featured/trailer-thumbnail.jpeg",
@@ -138,14 +140,50 @@ export const siteContent = {
     title: "The Story",
     subtitle: "Our highest-viewed post — told one frame at a time.",
     slides: [
-      { image: assets.images.story.slide01Intro, caption: "The story begins." },
-      { image: assets.images.story.slide02, caption: "The journey starts here." },
-      { image: assets.images.story.slide03, caption: "Every session counts." },
-      { image: assets.images.story.slide04, caption: "Built in the gym." },
-      { image: assets.images.story.slide05, caption: "Pressure creates progress." },
-      { image: assets.images.story.slide06, caption: "Eyes on the prize." },
-      { image: assets.images.story.slide07, caption: "The grind never stops." },
-      { image: assets.images.story.slide08, caption: "This story is still unfolding." },
+      { image: assets.images.story.image1, caption: "THE STORY BEGINS" },
+      {
+        image: assets.images.story.image2,
+        caption: "28 years old.\nAnd I'm going to become an MMA champion.",
+      },
+      {
+        image: assets.images.story.image3,
+        caption:
+          "Some say it's too late.\nI'd rather find out than spend my life wondering.",
+      },
+      {
+        image: assets.images.story.image4,
+        caption:
+          "Looking back, I've trained many sports and built businesses.\nBut one pattern kept showing up.",
+      },
+      {
+        image: assets.images.story.image5,
+        caption:
+          "I kept moving on before discovering my limit.\nNo belt. No mastery. No full commitment.",
+      },
+      {
+        image: assets.images.story.image6,
+        caption:
+          "For the first time, I'm putting everything into one thing.\nAnd staying with it.",
+      },
+      {
+        image: assets.images.story.image7,
+        caption:
+          "This isn't just about becoming champion.\nIt's about a question I've carried for years…",
+      },
+      {
+        image: assets.images.story.image8,
+        caption: "What becomes possible when you stop starting over?",
+      },
+      {
+        image: assets.images.story.image9,
+        caption:
+          "I have no idea what will happen.\nBut I'll never wonder if I gave everything I had.",
+      },
+      {
+        image: assets.images.story.image10,
+        caption:
+          "If this journey gives my son courage for whatever life brings…\nThen I've already won.",
+      },
     ] satisfies StorySlide[],
   },
   featured: [

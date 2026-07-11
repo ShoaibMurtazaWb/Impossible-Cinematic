@@ -135,7 +135,7 @@ export function StorySlider() {
                 draggable={false}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
-              <p className="absolute bottom-6 left-6 right-6 font-display text-2xl uppercase text-white md:text-4xl">
+              <p className="absolute bottom-4 left-4 right-4 whitespace-pre-line font-display text-lg uppercase leading-snug text-white sm:bottom-6 sm:left-6 sm:right-6 sm:text-2xl md:text-3xl lg:text-4xl">
                 {slide.caption}
               </p>
             </div>
