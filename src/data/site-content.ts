@@ -56,6 +56,8 @@ export const assets = {
   images: {
     heroPoster: "/images/hero-poster.jpeg",
     partners: {
+      amgMiami: "/images/partners/amg_logo.png",
+      gtgymHq: "/images/partners/gtgym_logo.png",
       tricoastInternational: "/images/partners/tricoast-international.png",
       trinityBoxingNewYork: "/images/partners/trinity-boxing-new-york.png",
     },
@@ -87,8 +89,8 @@ export const assets = {
       riccoRodriguez: "/images/team/ricco-rodriguez.png",
       colinDingelstad: "/images/team/colin-dingelstad.png",
       mattCohen: "/images/team/matt-cohen.jpeg",
-      viAngeliLanot: "/images/team/vi-angeli-lanot.jpg",
-      simonRubenstein: "/images/team/simon-rubenstein.jpg",
+      viAngeliLanot: "/images/team/vi-angeli-lanot.png",
+      simonRubenstein: "/images/team/simon-rubenstein.png",
       martinSnow: "/images/team/martin-snow.png",
     },
   },
@@ -121,9 +123,9 @@ export const siteContent = {
     ] satisfies CTA[],
   },
   partners: [
-    { name: "AMG Miami" },
+    { name: "AMG Miami", logo: assets.images.partners.amgMiami },
     { name: "Tricoast International", logo: assets.images.partners.tricoastInternational },
-    { name: "Gtgym_hq" },
+    { name: "Gtgym_hq", logo: assets.images.partners.gtgymHq },
     { name: "Trinity Boxing New York", logo: assets.images.partners.trinityBoxingNewYork },
   ] satisfies Partner[],
   tricoast: {
@@ -224,14 +226,14 @@ export const siteContent = {
       role: "Editorial & Narrative Director",
       bio: "Vi and her team have decades of experience editing for some of the biggest social media and streaming brands in the world.",
       image: assets.images.team.viAngeliLanot,
-      imagePosition: "center top",
+      imagePosition: "center 12%",
     },
     {
       name: "Simon Rubenstein",
       role: "Lead Cinematographer | Co-producer",
       bio: "Award-winning producer, director, and cinematographer, and founder of Brooklyn Pictures Entertainment, with collaborations spanning Netflix, HBO, Disney, Marvel, Apple TV+, Sony, Lionsgate, Universal, and PBS.",
       image: assets.images.team.simonRubenstein,
-      imagePosition: "center top",
+      imagePosition: "center 18%",
     },
     {
       name: "Martin Snow",
