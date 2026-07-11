@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Anton, Inter } from "next/font/google";
 import { siteContent } from "@/data/site-content";
+import { getSiteUrl } from "@/lib/site-url";
 import "./globals.css";
 
 const anton = Anton({
@@ -19,12 +20,7 @@ const { brand } = siteContent;
 const siteDescription =
   "Follow Colin's pursuit of becoming an MMA champion in a cinematic documentary series happening right now.";
 
-const metadataBase = new URL(
-  process.env.NEXT_PUBLIC_SITE_URL ??
-    (process.env.VERCEL_URL
-      ? `https://${process.env.VERCEL_URL}`
-      : "http://localhost:3000"),
-);
+const metadataBase = new URL(getSiteUrl());
 
 export const metadata: Metadata = {
   metadataBase,
