@@ -193,7 +193,7 @@ export const siteContent = {
   },
   story: {
     title: "The Story",
-    subtitle: "Our highest-viewed post — told one frame at a time.",
+    subtitle: "A journey unfolding in real time - told one frame at a time",
     slides: [
       { image: assets.images.story.image1, caption: "THE STORY BEGINS" },
       {
