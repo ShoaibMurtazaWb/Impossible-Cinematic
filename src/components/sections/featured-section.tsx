@@ -29,7 +29,7 @@ export function FeaturedSection() {
         <div className="mb-8 flex flex-col gap-6 sm:mb-14 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <h2 className="font-display text-4xl uppercase text-[#e5e2e1] md:text-5xl">Featured Content</h2>
-            <p className="mt-2 text-[#e7bdb6]/80">Instagram posts and early cuts from the journey.</p>
+            <p className="mt-2 text-[#e7bdb6]/80">Social media and early cuts from the journey.</p>
           </div>
           <div className="flex shrink-0 items-center justify-center gap-3 sm:justify-end">
             <button

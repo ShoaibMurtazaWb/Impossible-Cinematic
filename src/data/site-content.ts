@@ -6,6 +6,7 @@ export type VideoItem = {
   meta: string;
   image: string;
   videoUrl: string;
+  format?: "landscape" | "portrait";
 };
 
 export type TeamMember = {
@@ -53,6 +54,8 @@ export const assets = {
     heroTrailer: "/videos/hero-trailer.mp4",
     featuredPost02: "/videos/featured-post-02.mp4",
     featuredPost03: "/videos/featured-post-03.mp4",
+    featuredPost04: "/videos/featured-post-04.mp4",
+    featuredPost05: "/videos/featured-post-05.mp4",
   },
   images: {
     heroPoster: "/images/hero-poster.jpeg",
@@ -82,6 +85,8 @@ export const assets = {
       trailerThumbnail: "/images/featured/trailer-thumbnail.jpeg",
       post02Thumbnail: "/images/featured/post-02-thumbnail.jpeg",
       post03Thumbnail: "/images/featured/post-03-thumbnail.jpeg",
+      post04Thumbnail: "/images/featured/post-04-thumbnail.jpeg",
+      post05Thumbnail: "/images/featured/post-05-thumbnail.jpeg",
     },
     sections: {
       quoteBackground: "/images/sections/quote-background.jpeg",
@@ -239,21 +244,37 @@ export const siteContent = {
   featured: [
     {
       title: "IMPOSSIBLE Trailer",
-      meta: "Featured · Official trailer",
+      meta: "Social media · Official trailer",
       image: assets.images.featured.trailerThumbnail,
       videoUrl: assets.videos.heroTrailer,
     },
     {
-      title: "Instagram Post 02",
-      meta: "Featured · Training",
+      title: "Jiu Jitsu World Champions",
+      meta: "Social media · Early cut",
       image: assets.images.featured.post02Thumbnail,
       videoUrl: assets.videos.featuredPost02,
+      format: "portrait",
     },
     {
-      title: "Instagram Post 03",
-      meta: "Featured · Mentality",
+      title: "Training with former world champion UFC",
+      meta: "Social media · Early cut",
       image: assets.images.featured.post03Thumbnail,
       videoUrl: assets.videos.featuredPost03,
+      format: "portrait",
+    },
+    {
+      title: "Training with heavyweight boxing champion",
+      meta: "Social media · Early cut",
+      image: assets.images.featured.post04Thumbnail,
+      videoUrl: assets.videos.featuredPost04,
+      format: "portrait",
+    },
+    {
+      title: "Training with 5x golden gloves champions",
+      meta: "Social media · Early cut",
+      image: assets.images.featured.post05Thumbnail,
+      videoUrl: assets.videos.featuredPost05,
+      format: "portrait",
     },
   ] satisfies VideoItem[],
   quote: {

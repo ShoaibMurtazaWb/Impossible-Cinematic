@@ -13,13 +13,13 @@ export function VideoCard({ item }: { item: VideoItem }) {
       className="group min-w-[85vw] snap-center cursor-pointer transition-transform duration-500 hover:scale-[1.015] md:min-w-[600px]"
       onClick={() => openVideo(item)}
     >
-      <div className="relative mb-6 h-[410px] overflow-hidden rounded-xl border border-white/10 bg-[#ffffff06]">
+      <div className="relative mb-6 aspect-video w-full overflow-hidden rounded-xl border border-white/10 bg-[#ffffff06]">
         <div className="absolute inset-0 transition-transform duration-700 group-hover:scale-110">
           <Image
             src={item.image}
             alt={item.title}
             fill
-            className="object-cover"
+            className="object-cover object-center"
             sizes="(min-width: 768px) 600px, 85vw"
           />
         </div>

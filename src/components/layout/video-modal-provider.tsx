@@ -45,7 +45,7 @@ function VideoModal({
 
   return (
     <div
-      className="fixed inset-0 z-[80] flex items-center justify-center bg-black/75 p-4 backdrop-blur-sm"
+      className="fixed inset-0 z-[80] flex items-center justify-center bg-black/75 p-4 backdrop-blur-sm md:p-4"
       onClick={onClose}
     >
       <div
@@ -54,7 +54,7 @@ function VideoModal({
         aria-modal="true"
         aria-label={item.title}
         tabIndex={-1}
-        className="relative w-full max-w-5xl rounded-2xl border border-white/20 bg-[#131313] outline-none"
+        className="relative w-full max-w-5xl outline-none"
         onClick={(event) => event.stopPropagation()}
       >
         <button
@@ -65,7 +65,21 @@ function VideoModal({
         >
           <X size={20} />
         </button>
-        <video src={item.videoUrl} controls autoPlay className="h-auto w-full rounded-2xl" />
+        <div
+          className={`mx-auto overflow-hidden rounded-2xl border border-white/20 bg-black ${
+            item.format === "portrait"
+              ? "aspect-[9/16] w-full max-h-[85dvh] md:aspect-video md:max-h-[80vh]"
+              : "aspect-video max-h-[80vh] w-full"
+          }`}
+        >
+          <video
+            src={item.videoUrl}
+            controls
+            autoPlay
+            playsInline
+            className="h-full w-full object-contain"
+          />
+        </div>
       </div>
     </div>
   );
