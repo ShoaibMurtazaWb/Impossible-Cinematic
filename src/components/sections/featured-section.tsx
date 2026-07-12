@@ -16,7 +16,11 @@ export function FeaturedSection() {
   const scrollFeatured = (direction: "prev" | "next") => {
     const slider = sliderRef.current;
     if (!slider) return;
-    const amount = Math.max(slider.clientWidth * 0.8, 420);
+    const firstCard = slider.querySelector("article");
+    const gap = 32;
+    const amount = firstCard
+      ? firstCard.clientWidth + gap
+      : Math.max(slider.clientWidth / 3, 280);
     slider.scrollBy({
       left: direction === "next" ? amount : -amount,
       behavior: getScrollBehavior(prefersReducedMotion),
@@ -24,9 +28,9 @@ export function FeaturedSection() {
   };
 
   return (
-    <section id="featured" className="min-h-screen snap-start border-y border-white/5 bg-[#0e0e0e] px-4 py-24 md:px-16">
-      <div className="mx-auto max-w-[1440px]">
-        <div className="mb-8 flex flex-col gap-6 sm:mb-14 sm:flex-row sm:items-end sm:justify-between">
+    <section id="featured" className="min-h-screen snap-start border-y border-white/5 bg-[#0e0e0e] px-4 py-20 md:px-16 md:py-24">
+      <div className="mx-auto w-full max-w-[1440px]">
+        <div className="mb-8 flex flex-col gap-5 sm:mb-10 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <h2 className="font-display text-4xl uppercase text-[#e5e2e1] md:text-5xl">Featured Content</h2>
             <p className="mt-2 text-[#e7bdb6]/80">Social media and early cuts from the journey.</p>

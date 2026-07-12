@@ -10,27 +10,25 @@ export function VideoCard({ item }: { item: VideoItem }) {
 
   return (
     <article
-      className="group min-w-[85vw] snap-center cursor-pointer transition-transform duration-500 hover:scale-[1.015] md:min-w-[600px]"
+      className="group w-[85vw] shrink-0 snap-center cursor-pointer transition-transform duration-500 hover:scale-[1.015] sm:w-[calc((100%-2rem)/2)] lg:w-[calc((100%-4rem)/3)]"
       onClick={() => openVideo(item)}
     >
-      <div className="relative mb-6 aspect-video w-full overflow-hidden rounded-xl border border-white/10 bg-[#ffffff06]">
-        <div className="absolute inset-0 transition-transform duration-700 group-hover:scale-110">
-          <Image
-            src={item.image}
-            alt={item.title}
-            fill
-            className="object-cover object-center"
-            sizes="(min-width: 768px) 600px, 85vw"
-          />
-        </div>
+      <div className="relative mb-4 aspect-[9/16] w-full max-h-[54vh] overflow-hidden rounded-xl border border-white/10 bg-[#0a0a0a] sm:mb-5 lg:max-h-[58vh]">
+        <Image
+          src={item.image}
+          alt={item.title}
+          fill
+          className="object-cover object-center"
+          sizes="(min-width: 1024px) 420px, (min-width: 640px) 320px, 85vw"
+        />
         <div className="absolute inset-0 bg-black/45 transition-colors group-hover:bg-black/20" />
         <div className="absolute inset-0 flex items-center justify-center">
-          <div className="grid h-20 w-20 place-items-center rounded-full border border-white/30 bg-black/45 text-[#be0000] backdrop-blur-md transition-all duration-500 group-hover:scale-110 group-hover:border-[#be0000]">
-            <Play size={32} fill="currentColor" />
+          <div className="grid h-16 w-16 place-items-center rounded-full border border-white/30 bg-black/45 text-[#be0000] backdrop-blur-md transition-all duration-500 group-hover:scale-110 group-hover:border-[#be0000]">
+            <Play size={28} fill="currentColor" />
           </div>
         </div>
       </div>
-      <h3 className="font-display text-3xl uppercase text-[#e5e2e1] transition-colors group-hover:text-[#be0000]">
+      <h3 className="font-display text-xl uppercase leading-tight text-[#e5e2e1] transition-colors group-hover:text-[#be0000] sm:text-2xl">
         {item.title}
       </h3>
       <p className="mt-1 text-sm text-[#e7bdb6]/80">{item.meta}</p>
