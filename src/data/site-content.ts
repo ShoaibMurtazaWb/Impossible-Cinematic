@@ -45,6 +45,14 @@ export type FooterLink = {
   href: string;
 };
 
+export type PressKitDocument = {
+  id: string;
+  label: string;
+  title: string;
+  description?: string;
+  pdfUrl: string;
+};
+
 export const assets = {
   brand: {
     logo: "/brand/logo.png",
@@ -353,9 +361,29 @@ export const siteContent = {
     cta: "Become a Partner",
     background: assets.images.sections.finalCtaBackground,
   },
+  pressKit: {
+    title: "Press Kit",
+    subtitle: "Media resources and sponsorship materials for IMPOSSIBLE.",
+    documents: [
+      {
+        id: "media-kit",
+        label: "Media Kit",
+        title: "IMPOSSIBLE Documentary Media Kit",
+        description: "Project overview, team bios, and press-ready information.",
+        pdfUrl: "/press-kit/IM_POSSIBLE_Documentary_Media_Kit.pdf",
+      },
+      {
+        id: "sponsorship-deck",
+        label: "Sponsorship Deck",
+        title: "IMPOSSIBLE Sponsorship Deck",
+        description: "Partnership opportunities, audience reach, and sponsorship tiers.",
+        pdfUrl: "/press-kit/IM_POSSIBLE_Sponsorship_Deck_Master.pdf",
+      },
+    ] satisfies PressKitDocument[],
+  },
   footerLinks: [
     { label: "Team", href: "/team" },
-    { label: "Press Kit", href: "/" },
+    { label: "Press Kit", href: "/press-kit" },
     { label: "Privacy Policy", href: "/privacy-policy" },
     { label: "Terms of Service", href: "/terms-of-service" },
     { label: "Contact", href: "mailto:colin.dingelstad@gmail.com?subject=IMPOSSIBLE%20Contact" },
