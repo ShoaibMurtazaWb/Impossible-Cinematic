@@ -190,7 +190,7 @@ export const siteContent = {
     { label: "Results", href: "/#results" },
     { label: "Team", href: "/team" },
     { label: "Press Kit", href: "/press-kit" },
-    { label: "Sponsorship Deck", href: "/press-kit#sponsorship-deck" },
+    { label: "Sponsorship Deck", href: "/press-kit?tab=sponsorship-deck" },
   ] satisfies NavItem[],
   hero: {
     lines: [

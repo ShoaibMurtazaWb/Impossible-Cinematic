@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { SubpageShell } from "@/components/layout/subpage-shell";
 import { PressKitViewer } from "@/components/sections/press-kit-viewer";
 import { SectionHeading } from "@/components/ui/primitives";
@@ -16,7 +17,9 @@ export default function PressKitPage() {
   return (
     <SubpageShell wide>
       <SectionHeading title={title} subtitle={subtitle} />
-      <PressKitViewer documents={documents} />
+      <Suspense fallback={<div className="h-[min(78vh,880px)] w-full rounded-xl border border-white/10 bg-[#0a0a0a]" />}>
+        <PressKitViewer documents={documents} />
+      </Suspense>
     </SubpageShell>
   );
 }

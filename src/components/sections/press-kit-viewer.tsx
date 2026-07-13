@@ -1,36 +1,55 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { ExternalLink } from "lucide-react";
 import type { PressKitDocument } from "@/data/site-content";
 
-function getInitialDocumentId(documents: PressKitDocument[]) {
-  if (typeof window === "undefined") return documents[0]?.id ?? "";
-
-  const hash = window.location.hash.replace("#", "");
-  if (hash && documents.some((doc) => doc.id === hash)) {
-    return hash;
+function resolveActiveId(tab: string | null, documents: PressKitDocument[]) {
+  const firstId = documents[0]?.id ?? "";
+  if (tab && documents.some((doc) => doc.id === tab)) {
+    return tab;
   }
-
-  return documents[0]?.id ?? "";
+  return firstId;
 }
 
 export function PressKitViewer({ documents }: { documents: PressKitDocument[] }) {
-  const [activeId, setActiveId] = useState(() => getInitialDocumentId(documents));
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const firstId = documents[0]?.id ?? "";
+  const activeId = resolveActiveId(searchParams.get("tab"), documents);
   const activeDoc = documents.find((doc) => doc.id === activeId) ?? documents[0];
 
   useEffect(() => {
-    const syncTabFromHash = () => {
-      const hash = window.location.hash.replace("#", "");
-      if (hash && documents.some((doc) => doc.id === hash)) {
-        setActiveId(hash);
-      }
-    };
+    const rawHash = window.location.hash.slice(1);
+    if (!rawHash) return;
 
-    syncTabFromHash();
-    window.addEventListener("hashchange", syncTabFromHash);
-    return () => window.removeEventListener("hashchange", syncTabFromHash);
-  }, [documents]);
+    const hashTab = rawHash.split("#")[0];
+    if (!hashTab || !documents.some((doc) => doc.id === hashTab)) return;
+
+    const params = new URLSearchParams(searchParams.toString());
+    if (hashTab === firstId) {
+      params.delete("tab");
+    } else {
+      params.set("tab", hashTab);
+    }
+
+    const query = params.toString();
+    router.replace(query ? `${pathname}?${query}` : pathname, { scroll: false });
+  }, [documents, firstId, pathname, router, searchParams]);
+
+  const setTab = (id: string) => {
+    const params = new URLSearchParams(searchParams.toString());
+    if (id === firstId) {
+      params.delete("tab");
+    } else {
+      params.set("tab", id);
+    }
+
+    const query = params.toString();
+    router.replace(query ? `${pathname}?${query}` : pathname, { scroll: false });
+  };
 
   if (!activeDoc) return null;
 
@@ -51,10 +70,7 @@ export function PressKitViewer({ documents }: { documents: PressKitDocument[] })
               id={`tab-${doc.id}`}
               aria-selected={isActive}
               aria-controls={`panel-${doc.id}`}
-              onClick={() => {
-                setActiveId(doc.id);
-                window.history.replaceState(null, "", `#${doc.id}`);
-              }}
+              onClick={() => setTab(doc.id)}
               className={`cursor-pointer border px-5 py-3 text-left text-xs font-medium uppercase tracking-[0.18em] transition-colors sm:flex-1 sm:text-center ${
                 isActive
                   ? "border-[#be0000]/60 bg-[#be0000]/10 text-[#e5e2e1]"
