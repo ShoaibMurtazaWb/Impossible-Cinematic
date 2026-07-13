@@ -168,11 +168,13 @@ export const siteContent = {
     logo: assets.brand.logo,
   },
   nav: [
+    { label: "Home", href: "/#hero" },
     { label: "Partners", href: "/#partners" },
     { label: "Story", href: "/#story" },
     { label: "Featured", href: "/#featured" },
     { label: "Results", href: "/#results" },
     { label: "Team", href: "/team" },
+    { label: "Press Kit", href: "/press-kit" },
     { label: "Sponsorship", href: "/#sponsorship" },
   ] satisfies NavItem[],
   hero: {
