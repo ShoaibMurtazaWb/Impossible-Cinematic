@@ -1,8 +1,9 @@
 import Image from "next/image";
 import type { TeamMember } from "@/data/site-content";
 import { GlassCard } from "@/components/ui/primitives";
+import { SocialLinks } from "@/components/ui/social-links";
 
-export function TeamCard({ name, role, bio, image, imagePosition = "center" }: TeamMember) {
+export function TeamCard({ name, role, bio, image, imagePosition = "center", links }: TeamMember) {
   return (
     <GlassCard className="group text-center transition-all duration-300 hover:scale-[1.02] hover:border-[#be0000]/50">
       <div className="relative mx-auto mb-5 h-32 w-32 overflow-hidden rounded-full border border-white/10 bg-[#1a1a1a]">
@@ -20,6 +21,7 @@ export function TeamCard({ name, role, bio, image, imagePosition = "center" }: T
       </h3>
       <p className="mt-2 text-sm uppercase tracking-[0.2em] text-[#ffb4a8]">{role}</p>
       <p className="mt-4 text-sm leading-relaxed text-[#e7bdb6]/85">{bio}</p>
+      <SocialLinks links={links} label={name} className="mt-5 justify-center" />
     </GlassCard>
   );
 }

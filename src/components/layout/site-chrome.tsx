@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { siteContent } from "@/data/site-content";
 import { Logo } from "@/components/ui/primitives";
+import { SocialLinks } from "@/components/ui/social-links";
 import { HomeLogoLink } from "@/components/layout/home-logo-link";
 import { Navbar } from "@/components/layout/navbar";
 
@@ -15,6 +16,12 @@ export function Footer() {
             <Logo className="mx-auto w-full max-w-[120px] sm:max-w-[160px] md:max-w-[250px] lg:mx-0 lg:max-w-[220px]" />
           </HomeLogoLink>
           <p className="mt-3 text-sm text-[#e7bdb6]/70">{siteContent.brand.tagline}</p>
+          <SocialLinks
+            links={siteContent.social}
+            label={siteContent.brand.name}
+            className="mt-4 justify-center lg:justify-start"
+            iconClassName="h-4 w-4"
+          />
         </div>
         <div className="flex flex-col items-center justify-center gap-4 lg:flex-row lg:flex-nowrap lg:gap-5">
           {siteContent.footerLinks.map((item) => {

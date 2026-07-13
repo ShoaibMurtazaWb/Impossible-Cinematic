@@ -9,12 +9,16 @@ export type VideoItem = {
   format?: "landscape" | "portrait";
 };
 
+export type SocialLinkType = "linkedin" | "twitter" | "instagram" | "facebook" | "website" | "email";
+export type SocialLinks = Partial<Record<SocialLinkType, string>>;
+
 export type TeamMember = {
   name: string;
   role: string;
   bio: string;
   image: string;
   imagePosition?: string;
+  links?: SocialLinks;
 };
 
 export type SponsorBenefit = {
@@ -108,6 +112,7 @@ export const assets = {
       viAngeliLanot: "/images/team/vi-angeli-lanot.png",
       simonRubenstein: "/images/team/simon-rubenstein.png",
       martinSnow: "/images/team/martin-snow.png",
+      zohaibMurtaza: "/images/team/zohaib-murtaza.jpeg",
     },
   },
 } as const;
@@ -156,6 +161,18 @@ const homepageTeam: TeamMember[] = [
     image: assets.images.team.martinSnow,
     imagePosition: "center 15%",
   },
+  {
+    name: "Zohaib Murtaza",
+    role: "Website Developer",
+    bio: "Website developer and designer for IMPOSSIBLE. A full stack developer with a passion for creating beautiful and functional websites.",
+    image: assets.images.team.zohaibMurtaza,
+    imagePosition: "center 15%",
+    links: {
+      website: "https://zohaibmurtaza.com",
+      linkedin: "https://www.linkedin.com/in/zohaib-m/",
+      email: "me@zohaibmurtaza.com",
+    }
+  },
 ];
 
 /** Extra members listed only on /team — add new people here. */
@@ -168,14 +185,12 @@ export const siteContent = {
     logo: assets.brand.logo,
   },
   nav: [
-    { label: "Home", href: "/#hero" },
     { label: "Partners", href: "/#partners" },
     { label: "Story", href: "/#story" },
-    { label: "Featured", href: "/#featured" },
     { label: "Results", href: "/#results" },
     { label: "Team", href: "/team" },
     { label: "Press Kit", href: "/press-kit" },
-    { label: "Sponsorship", href: "/#sponsorship" },
+    { label: "Sponsorship Deck", href: "/press-kit#sponsorship-deck" },
   ] satisfies NavItem[],
   hero: {
     lines: [
@@ -390,4 +405,7 @@ export const siteContent = {
     { label: "Terms of Service", href: "/terms-of-service" },
     { label: "Contact", href: "mailto:colin.dingelstad@gmail.com?subject=IMPOSSIBLE%20Contact" },
   ] satisfies FooterLink[],
+  social: {
+    instagram: "https://www.instagram.com/colin.dingelstad/",
+  } satisfies SocialLinks,
 };
