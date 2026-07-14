@@ -117,8 +117,8 @@ export const assets = {
   },
 } as const;
 
-/** Featured Visionaries shown on the homepage (6 only). */
-const homepageTeam: TeamMember[] = [
+/** Full team roster — home shows the first 6; /team shows everyone. */
+const allTeamMembers: TeamMember[] = [
   {
     name: "Ricco Rodriguez",
     role: "Trainer",
@@ -174,9 +174,6 @@ const homepageTeam: TeamMember[] = [
     }
   },
 ];
-
-/** Extra members listed only on /team — add new people here. */
-const additionalTeamMembers: TeamMember[] = [];
 
 export const siteContent = {
   brand: {
@@ -333,11 +330,11 @@ export const siteContent = {
       },
     ] satisfies ResultStat[],
   },
-  team: homepageTeam,
+  team: allTeamMembers.slice(0, 6),
   teamPage: {
     title: "The Visionaries",
     subtitle: "Award-winning talent dedicated to crafting an unprecedented narrative experience.",
-    members: [...homepageTeam, ...additionalTeamMembers],
+    members: allTeamMembers,
   },
   partner: {
     title: "More Than a Sponsor.",
