@@ -163,8 +163,8 @@ const allTeamMembers: TeamMember[] = [
   },
   {
     name: "Zohaib Murtaza",
-    role: "Website Developer",
-    bio: "Website developer and designer for IMPOSSIBLE. A full stack developer with a passion for creating beautiful and functional websites.",
+    role: "Digital Presence Manager",
+    bio: "Digital Presence Manager at IMPOSSIBLE, focused on creating and managing engaging digital experiences that strengthen the brand.",
     image: assets.images.team.zohaibMurtaza,
     imagePosition: "center 15%",
     links: {
