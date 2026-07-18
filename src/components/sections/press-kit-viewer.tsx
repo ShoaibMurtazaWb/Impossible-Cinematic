@@ -40,15 +40,14 @@ export function PressKitViewer({ documents }: { documents: PressKitDocument[] })
   }, [documents, firstId, pathname, router, searchParams]);
 
   const setTab = (id: string) => {
-    const params = new URLSearchParams(searchParams.toString());
     if (id === firstId) {
-      params.delete("tab");
-    } else {
-      params.set("tab", id);
+      router.push("/press-kit", { scroll: false });
+      return;
     }
-
-    const query = params.toString();
-    router.replace(query ? `${pathname}?${query}` : pathname, { scroll: false });
+  
+    router.push(`/press-kit?tab=${encodeURIComponent(id)}`, {
+      scroll: false,
+    });
   };
 
   if (!activeDoc) return null;
