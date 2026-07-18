@@ -344,6 +344,10 @@ export const siteContent = {
       "This isn't traditional advertising. It's an opportunity to support an ambitious documentary while aligning your brand with resilience, seemingly impossible ambition, and the peak of human potential.",
     ],
     cta: "Become a Partner",
+    sponsorshipDeckCta: {
+      label: "Sponsorship Deck",
+      href: "/press-kit?tab=sponsorship-deck",
+    } satisfies CTA,
     benefits: [
       {
         title: "Cinematic Branding",

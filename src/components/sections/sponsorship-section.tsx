@@ -24,9 +24,18 @@ export function SponsorshipSection() {
               <p key={paragraph}>{paragraph}</p>
             ))}
           </div>
-          <Button className="mt-8" onClick={openPartnerModal}>
-            {siteContent.partner.cta}
-          </Button>
+          <div className="mt-8 flex flex-wrap gap-4">
+  <Button onClick={openPartnerModal}>
+    {siteContent.partner.cta}
+  </Button>
+
+  <Button
+    href={siteContent.partner.sponsorshipDeckCta.href}
+    variant="glass"
+  >
+    {siteContent.partner.sponsorshipDeckCta.label}
+  </Button>
+</div>
         </div>
         <div className="grid gap-4 sm:grid-cols-2 lg:col-span-7">
           {siteContent.partner.benefits.map((benefit) => (
