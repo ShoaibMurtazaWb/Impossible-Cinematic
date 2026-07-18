@@ -1,54 +1,17 @@
 "use client";
 
-import { useEffect } from "react";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { ExternalLink } from "lucide-react";
 import type { PressKitDocument } from "@/data/site-content";
 
-function resolveActiveId(tab: string | null, documents: PressKitDocument[]) {
-  const firstId = documents[0]?.id ?? "";
-  if (tab && documents.some((doc) => doc.id === tab)) {
-    return tab;
-  }
-  return firstId;
-}
-
-export function PressKitViewer({ documents }: { documents: PressKitDocument[] }) {
-  const router = useRouter();
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
-  const firstId = documents[0]?.id ?? "";
-  const activeId = resolveActiveId(searchParams.get("tab"), documents);
-  const activeDoc = documents.find((doc) => doc.id === activeId) ?? documents[0];
-
-  useEffect(() => {
-    const rawHash = window.location.hash.slice(1);
-    if (!rawHash) return;
-
-    const hashTab = rawHash.split("#")[0];
-    if (!hashTab || !documents.some((doc) => doc.id === hashTab)) return;
-
-    const params = new URLSearchParams(searchParams.toString());
-    if (hashTab === firstId) {
-      params.delete("tab");
-    } else {
-      params.set("tab", hashTab);
-    }
-
-    const query = params.toString();
-    router.replace(query ? `${pathname}?${query}` : pathname, { scroll: false });
-  }, [documents, firstId, pathname, router, searchParams]);
-
-  const setTab = (id: string) => {
-    if (id === firstId) {
-      router.push("/press-kit", { scroll: false });
-      return;
-    }
-  
-    router.push(`/press-kit?tab=${encodeURIComponent(id)}`, {
-      scroll: false,
-    });
-  };
+export function PressKitViewer({
+  documents,
+  activeId,
+}: {
+  documents: PressKitDocument[];
+  activeId: string;
+}) {
+  const activeDoc =
+    documents.find((doc) => doc.id === activeId) ?? documents[0];
 
   if (!activeDoc) return null;
 
@@ -59,29 +22,38 @@ export function PressKitViewer({ documents }: { documents: PressKitDocument[] })
         aria-label="Press kit documents"
         className="flex flex-col gap-2 sm:flex-row sm:gap-0"
       >
-        {documents.map((doc) => {
+        {documents.map((doc, index) => {
           const isActive = doc.id === activeDoc.id;
+
+          const href =
+            index === 0
+              ? "/press-kit"
+              : `/press-kit?tab=${encodeURIComponent(doc.id)}`;
+
           return (
-            <button
+            <a
               key={doc.id}
-              type="button"
+              href={href}
               role="tab"
               id={`tab-${doc.id}`}
               aria-selected={isActive}
               aria-controls={`panel-${doc.id}`}
-              onClick={() => setTab(doc.id)}
               className={`cursor-pointer border px-5 py-3 text-left text-xs font-medium uppercase tracking-[0.18em] transition-colors sm:flex-1 sm:text-center ${
                 isActive
                   ? "border-[#be0000]/60 bg-[#be0000]/10 text-[#e5e2e1]"
                   : "border-white/10 bg-[#0e0e0e] text-[#e7bdb6]/70 hover:border-white/20 hover:text-[#e5e2e1]"
-              } ${doc.id === documents[0]?.id ? "rounded-t-xl sm:rounded-l-xl sm:rounded-tr-none" : ""} ${
-                doc.id === documents[documents.length - 1]?.id
+              } ${
+                index === 0
+                  ? "rounded-t-xl sm:rounded-l-xl sm:rounded-tr-none"
+                  : ""
+              } ${
+                index === documents.length - 1
                   ? "rounded-b-none sm:rounded-r-xl sm:rounded-bl-none"
                   : ""
               }`}
             >
               {doc.label}
-            </button>
+            </a>
           );
         })}
       </div>
@@ -96,8 +68,11 @@ export function PressKitViewer({ documents }: { documents: PressKitDocument[] })
           <h2 className="font-display text-xl uppercase text-[#e5e2e1] md:text-2xl">
             {activeDoc.title}
           </h2>
+
           {activeDoc.description ? (
-            <p className="mt-1 text-sm text-[#e7bdb6]/80">{activeDoc.description}</p>
+            <p className="mt-1 text-sm text-[#e7bdb6]/80">
+              {activeDoc.description}
+            </p>
           ) : null}
         </div>
 
@@ -112,6 +87,7 @@ export function PressKitViewer({ documents }: { documents: PressKitDocument[] })
           <p className="text-xs text-[#e7bdb6]/60">
             Scroll inside the viewer or open the PDF in a new tab.
           </p>
+
           <a
             href={activeDoc.pdfUrl}
             target="_blank"
