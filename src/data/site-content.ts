@@ -269,6 +269,7 @@ export const siteContent = {
       meta: "Social media · Official trailer",
       image: assets.images.featured.trailerThumbnail,
       videoUrl: assets.videos.heroTrailer,
+      format: "landscape",
     },
     {
       title: "Jiu Jitsu World Champions",
@@ -400,6 +401,7 @@ export const siteContent = {
     ] satisfies PressKitDocument[],
   },
   footerLinks: [
+    { label: "Trailer", href: "/trailer" },
     { label: "Team", href: "/team" },
     { label: "Press Kit", href: "/press-kit" },
     { label: "Privacy Policy", href: "/privacy-policy" },

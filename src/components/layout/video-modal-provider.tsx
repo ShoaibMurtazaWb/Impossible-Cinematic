@@ -66,7 +66,11 @@ function VideoModal({
           <X size={20} />
         </button>
         <div
-          className="mx-auto aspect-[9/16] w-full max-h-[85dvh] max-w-md overflow-hidden rounded-2xl border border-white/20 bg-black"
+          className={
+            item.format === "portrait"
+              ? "mx-auto aspect-[9/16] w-full max-h-[85dvh] max-w-md overflow-hidden rounded-2xl border border-white/20 bg-black"
+              : "mx-auto aspect-video w-full max-h-[85dvh] overflow-hidden rounded-2xl border border-white/20 bg-black"
+          }
         >
           <video
             src={item.videoUrl}

@@ -105,6 +105,37 @@ body {
   );
 }
 
+@keyframes trailer-stage-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.985);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes trailer-glow {
+  0%,
+  100% {
+    opacity: 0.55;
+  }
+
+  50% {
+    opacity: 1;
+  }
+}
+
+.trailer-stage {
+  animation: trailer-stage-in 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.trailer-stage > div:first-child {
+  animation: trailer-glow 6s ease-in-out infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .partners-marquee {
     overflow: visible;
@@ -117,6 +148,11 @@ body {
     justify-content: center;
     gap: 2.5rem 3.5rem;
     padding-inline: 1rem;
+  }
+
+  .trailer-stage,
+  .trailer-stage > div:first-child {
+    animation: none;
   }
 }
 

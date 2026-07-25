@@ -16,6 +16,7 @@ export function HeroSection() {
     meta: "Background video",
     image: siteContent.hero.poster,
     videoUrl: siteContent.hero.video,
+    format: "landscape" as const,
   };
 
   return (
