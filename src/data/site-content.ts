@@ -312,7 +312,7 @@ export const siteContent = {
       {
         value: "688k",
         label: "Views",
-        detail: "First 3 weeks of posting from a dormant account.",
+        detail: "First 3 weeks of posting.",
       },
       {
         value: "50/50",
